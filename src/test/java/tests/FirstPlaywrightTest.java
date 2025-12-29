@@ -1,0 +1,32 @@
+package tests;
+
+import base.BaseTest;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+public class FirstPlaywrightTest extends BaseTest {
+
+    @Test
+    public void verify8DaysHomePage() {
+
+        test = extent.createTest("Verify 8Days Home Page");
+
+        test.info("Navigating to 8days");
+        page.navigate("https://www.8days.sg");
+
+        test.info("Verifying title");
+        Assert.assertTrue(page.title().toLowerCase().contains("8days"));
+        test.pass("Title verified");
+
+        test.info("Verifying header menus");
+        Assert.assertTrue(
+                page.locator("a.main-menu__link:has-text('Entertainment')").isVisible()
+        );
+        test.pass("Entertainment menu visible");
+
+        Assert.assertTrue(
+                page.locator("//a[normalize-space()='Shopping']").isVisible()
+        );
+        test.pass("Shopping menu visible");
+    }
+}
