@@ -5,7 +5,10 @@ import com.aventstack.extentreports.*;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import utils.ExtentManager;
+import config.Config;
+import utils.TimeUtil;
 
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,6 +23,8 @@ public class BaseTest {
     protected ExtentReports extent;
     protected ExtentTest test;
 
+    Path videoPath;
+
     @BeforeClass
     public void globalSetup() {
         extent = ExtentManager.getExtent();
@@ -28,12 +33,16 @@ public class BaseTest {
         browser = playwright.webkit().launch(
                 new BrowserType.LaunchOptions().setHeadless(false)
         );
+    }
 
-        context = browser.newContext(
+    @BeforeMethod
+    public void setupTest(Method method) {
+        Browser.NewContextOptions options =
                 new Browser.NewContextOptions()
                         .setRecordVideoDir(Paths.get("videos/"))
-                        .setRecordVideoSize(1280, 720)
-        );
+                        .setRecordVideoSize(1280, 720);
+
+        context = browser.newContext(options);
 
         context.tracing().start(
                 new Tracing.StartOptions()
@@ -43,11 +52,21 @@ public class BaseTest {
         );
 
         page = context.newPage();
+
+        test = extent.createTest(method.getName());
     }
 
     @AfterMethod
-    public void captureFailure(ITestResult result) {
-        if (result.getStatus() == ITestResult.FAILURE && test != null) {
+    public void tearDownTest(ITestResult result) {
+
+        // 🔹 Stop tracing
+        context.tracing().stop(
+                new Tracing.StopOptions()
+                        .setPath(Paths.get("traces/" + result.getName() + ".zip"))
+        );
+
+        // 🔹 Screenshot on failure
+        if (result.getStatus() == ITestResult.FAILURE) {
             try {
                 Path screenshotDir = Paths.get("screenshots");
                 Files.createDirectories(screenshotDir);
@@ -65,14 +84,44 @@ public class BaseTest {
                 e.printStackTrace();
             }
         }
+
+        // 🔹 Close context FIRST (video is finalized here)
+        context.close();
+
+        // 🔹 Handle VIDEO rename / retention
+        try {
+            Path originalVideo = page.video().path();
+
+            String timestamp = TimeUtil.getTimestamp();
+            String newVideoName = "WEB_" + timestamp + ".webm";
+
+            Path targetDir = Paths.get("videos");
+            Files.createDirectories(targetDir);
+
+            Path renamedVideo = targetDir.resolve(newVideoName);
+
+            // Option 1: Record ALL videos
+            if (Config.VIDEO_RECORDING.equalsIgnoreCase("true")) {
+                Files.move(originalVideo, renamedVideo);
+            }
+
+            // Option 2: Record ONLY failed videos
+            else if (Config.VIDEO_RECORDING.equalsIgnoreCase("false")) {
+                if (result.getStatus() == ITestResult.FAILURE) {
+                    Files.move(originalVideo, renamedVideo);
+                } else {
+                    Files.deleteIfExists(originalVideo);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 
     @AfterClass
     public void globalTearDown() {
-        context.tracing().stop(
-                new Tracing.StopOptions().setPath(Paths.get("traces/trace.zip"))
-        );
-
         browser.close();
         playwright.close();
         extent.flush();
