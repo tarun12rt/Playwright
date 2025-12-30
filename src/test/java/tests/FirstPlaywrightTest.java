@@ -19,14 +19,22 @@ public class FirstPlaywrightTest extends BaseTest {
         test.pass("Title verified");
 
         test.info("Verifying header menus");
-        Assert.assertTrue(
-                page.locator("a.main-menu__link:has-text('Entertainment')").isVisible()
-        );
+
+        Assert.assertTrue(page.locator("a.main-menu__link:has-text('Entertainment')").isVisible());
         test.pass("Entertainment menu visible");
 
-        Assert.assertTrue(
-                page.locator("//a[normalize-space()='Shopping']").isVisible()
-        );
+        Assert.assertTrue(page.locator("//a[normalize-space()='Eat & drink']").isVisible());
+        test.pass("Eat & drink menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Shopping']").isVisible());
         test.pass("Shopping menu visible");
+
     }
+
 }
