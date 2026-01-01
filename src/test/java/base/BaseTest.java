@@ -4,6 +4,7 @@ import com.microsoft.playwright.*;
 import com.aventstack.extentreports.*;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
+import utils.BrowserFactory;
 import utils.ExtentManager;
 import config.Config;
 import utils.TimeUtil;
@@ -23,24 +24,22 @@ public class BaseTest {
     protected ExtentReports extent;
     protected ExtentTest test;
 
-    Path videoPath;
-
     @BeforeClass
     public void globalSetup() {
         extent = ExtentManager.getExtent();
-
         playwright = Playwright.create();
-        browser = playwright.webkit().launch(
-                new BrowserType.LaunchOptions().setHeadless(false)
-        );
+        browser = BrowserFactory.getBrowser(playwright);
     }
 
     @BeforeMethod
     public void setupTest(Method method) {
-        Browser.NewContextOptions options =
-                new Browser.NewContextOptions()
-                        .setRecordVideoDir(Paths.get("videos/"))
-                        .setRecordVideoSize(1280, 720);
+
+        Browser.NewContextOptions options = new Browser.NewContextOptions();
+
+        if (Config.getBoolean("video.recording")) {
+            options.setRecordVideoDir(Paths.get("videos"))
+                   .setRecordVideoSize(1280, 720);
+        }
 
         context = browser.newContext(options);
 
@@ -52,73 +51,65 @@ public class BaseTest {
         );
 
         page = context.newPage();
-
         test = extent.createTest(method.getName());
     }
 
     @AfterMethod
     public void tearDownTest(ITestResult result) {
 
-        // 🔹 Stop tracing
-        context.tracing().stop(
-                new Tracing.StopOptions()
-                        .setPath(Paths.get("traces/" + result.getName() + ".zip"))
-        );
+        try {
+            context.tracing().stop(
+                    new Tracing.StopOptions()
+                            .setPath(Paths.get("traces/" + result.getName() + ".zip"))
+            );
+        } catch (Exception ignored) {}
 
-        // 🔹 Screenshot on failure
         if (result.getStatus() == ITestResult.FAILURE) {
             try {
-                Path screenshotDir = Paths.get("screenshots");
-                Files.createDirectories(screenshotDir);
-
-                String screenshotPath = "screenshots/" + result.getName() + ".png";
+                Path screenshotPath =
+                        Paths.get("screenshots", result.getName() + ".png");
+                Files.createDirectories(screenshotPath.getParent());
 
                 page.screenshot(
-                        new Page.ScreenshotOptions().setPath(Paths.get(screenshotPath))
+                        new Page.ScreenshotOptions().setPath(screenshotPath)
                 );
 
                 test.fail(result.getThrowable());
-                test.addScreenCaptureFromPath(screenshotPath);
-
+                test.addScreenCaptureFromPath(screenshotPath.toString());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        // 🔹 Close context FIRST (video is finalized here)
+        // 🔹 CLOSE CONTEXT FIRST (finalizes video)
         context.close();
 
-        // 🔹 Handle VIDEO rename / retention
+        // 🔹 VIDEO HANDLING (AFTER context close)
         try {
-            Path originalVideo = page.video().path();
+            if (Config.getBoolean("video.recording")) {
 
-            String timestamp = TimeUtil.getTimestamp();
-            String newVideoName = "WEB_" + timestamp + ".webm";
+                Path originalVideo = page.video().path();
+                Path targetDir = Paths.get("videos");
+                Files.createDirectories(targetDir);
 
-            Path targetDir = Paths.get("videos");
-            Files.createDirectories(targetDir);
+                String timestamp = TimeUtil.getTimestamp();
+                Path renamedVideo =
+                        targetDir.resolve(result.getName() + "_" + timestamp + ".webm");
 
-            Path renamedVideo = targetDir.resolve(newVideoName);
-
-            // Option 1: Record ALL videos
-            if (Config.VIDEO_RECORDING.equalsIgnoreCase("true")) {
-                Files.move(originalVideo, renamedVideo);
-            }
-
-            // Option 2: Record ONLY failed videos
-            else if (Config.VIDEO_RECORDING.equalsIgnoreCase("false")) {
-                if (result.getStatus() == ITestResult.FAILURE) {
-                    Files.move(originalVideo, renamedVideo);
+                if (Config.getBoolean("video.onFailureOnly")) {
+                    if (result.getStatus() == ITestResult.FAILURE) {
+                        Files.move(originalVideo, renamedVideo);
+                    } else {
+                        Files.deleteIfExists(originalVideo);
+                    }
                 } else {
-                    Files.deleteIfExists(originalVideo);
+                    Files.move(originalVideo, renamedVideo);
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     @AfterClass
     public void globalTearDown() {
