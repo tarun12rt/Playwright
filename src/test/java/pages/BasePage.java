@@ -53,12 +53,23 @@ public class BasePage {
         }
     }
 
-    protected String getPageTitle() {
-        return page.title();
+    /* ================= SCROLL UTILITIES ================= */
+
+    protected void scrollTo(Locator locator) {
+        locator.scrollIntoViewIfNeeded();
     }
+
+    protected void scrollToBottom() {
+        page.evaluate("window.scrollTo(0, document.body.scrollHeight)");
+    }
+
+    /* ================= COMMON NAVIGATION ================= */
 
     protected void openBaseUrl() {
         page.navigate(Config.get("baseUrl"));
     }
 
+    protected String getPageTitle() {
+        return page.title();
+    }
 }
