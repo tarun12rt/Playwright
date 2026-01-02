@@ -6,15 +6,15 @@ import com.microsoft.playwright.Page;
 public class FooterPage extends BasePage {
 
     private final Locator onlineLinksPolicy;
+    private final Locator about8Days;
 
     public FooterPage(Page page) {
         super(page);
         this.onlineLinksPolicy = page.getByText("Online Links Policy");
+        this.about8Days = page.getByText("About 8days");
+
     }
 
-    public void scrollToFooter() {
-        onlineLinksPolicy.scrollIntoViewIfNeeded();
-    }
 
     public boolean isFooterVisible() {
         return safeIsVisible(onlineLinksPolicy);
@@ -25,7 +25,7 @@ public class FooterPage extends BasePage {
     }
 
     public boolean verifyFooterIsVisible() {
-        scrollToFooter();
+        scrollTo(onlineLinksPolicy);
         return isFooterVisible();
     }
 

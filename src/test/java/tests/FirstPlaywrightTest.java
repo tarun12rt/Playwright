@@ -1,10 +1,10 @@
 package tests;
 
-import base.BaseTest;
+import base.BaseTestSingleExecution;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class FirstPlaywrightTest extends BaseTest {
+public class FirstPlaywrightTest extends BaseTestSingleExecution {
 
     @Test
     public void verify8DaysHomePage() {
