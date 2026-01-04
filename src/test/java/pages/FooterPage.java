@@ -2,6 +2,8 @@ package pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import config.Config;
+import enums.FooterLinkNavigation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,4 +82,80 @@ public class FooterPage extends BasePage {
 
         return b1 && b2 && b3 && b4;
     }
+
+    public boolean verifyNavigation(Page navigatedPage, FooterLinkNavigation link) {
+        return navigatedPage.url().contains(link.getExpectedUrl());
+    }
+    public Page clickFooterLink(FooterLinkNavigation link) {
+
+        Locator footerLink = byText(link.getLinkText());
+        scrollTo(footerLink);
+
+        System.out.println("Clicking footer link UI text: " + link.getLinkText());
+
+        try {
+            Page newPage = page.context().waitForPage(() -> {
+                footerLink.click();
+            });
+            newPage.waitForLoadState();
+            return newPage;
+
+        } catch (Exception e) {
+            footerLink.click();
+            page.waitForLoadState();
+            return page;
+        }
+    }
+
+
+    public String resolveExpectedUrl(FooterLinkNavigation link) {
+        String expected = link.getExpectedUrl();
+
+        // External URLs (absolute)
+        if (expected.startsWith("https")) {
+            return expected;
+        }
+
+        // Internal URLs (relative)
+        return Config.get("baseUrl") + expected;
+    }
+
+    public Page clickFooterLinkAndReturn(FooterLinkNavigation link) {
+
+        Locator footerLink = byText(link.getLinkText());
+        scrollTo(footerLink);
+
+        Page navigatedPage;
+
+        try {
+            // NEW TAB case
+            navigatedPage = page.context().waitForPage(() -> {
+                footerLink.click();
+            });
+            navigatedPage.waitForLoadState();
+            return navigatedPage;
+
+        } catch (Exception e) {
+            // SAME TAB case
+            footerLink.click();
+            page.waitForLoadState();
+            return page;
+        }
+    }
+    public void returnToHome(Page navigatedPage) {
+
+        // New tab → close it
+        if (navigatedPage != page) {
+            navigatedPage.close();
+        }
+        // Same tab → go back
+        else {
+            page.goBack();
+            page.waitForLoadState();
+        }
+
+        // Scroll footer again for next link
+        scrollTo(byText("Online Links Policy"));
+    }
+
 }
