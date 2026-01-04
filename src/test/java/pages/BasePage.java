@@ -72,4 +72,12 @@ public class BasePage {
     protected String getPageTitle() {
         return page.title();
     }
+
+    protected Locator byText(String text) {
+        return page.getByText(text);
+    }
+
+    protected Locator byCss(String css) {
+        return page.locator(css);
+    }
 }
