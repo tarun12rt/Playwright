@@ -158,4 +158,34 @@ public class FooterPage extends BasePage {
         scrollTo(byText("Online Links Policy"));
     }
 
+    public boolean verifyPageNavigationOfAbout8DaysFooterLink(String aboutDaysPageUrl) {
+        scrollTo(about8Days);
+        safeClick(about8Days);
+        String currentPageUrl = page.url();
+        return aboutDaysPageUrl.equals(currentPageUrl);
+
+    }
+
+
+    public boolean verifyPageNavigationOfContactUsFooterLink(String contactUsPageUrl) {
+        scrollTo(about8Days);
+        safeClick(contactUs);
+        String currentPageUrl = page.url();
+        return contactUsPageUrl.equals(currentPageUrl);
+    }
+
+    public boolean verifyPageNavigationOfAdvertiseFooterLink(String advertisePageUrl) {
+        scrollTo(about8Days);
+        Page navigatedPage = clickAndSwitchToNewPage(advertise);
+        String currentPageUrl = navigatedPage.url();
+        return currentPageUrl.contains(advertisePageUrl);
+    }
+
+
+    public boolean verifyPageNavigationOfMediacorpDigitalNetworkPageUrlFooterLink(String mediacorpDigitalNetworkPageUrl) {
+        scrollTo(about8Days);
+        safeClick(mediacorpDigitalNetwork);
+        String currentPageUrl = page.url();
+        return mediacorpDigitalNetworkPageUrl.equals(currentPageUrl);
+    }
 }
