@@ -80,4 +80,51 @@ public class BasePage {
     protected Locator byCss(String css) {
         return page.locator(css);
     }
+
+    protected void switchToNewTab() {
+        Page newPage = page.context().waitForPage(() -> {
+            // action that opens new tab must be triggered before calling this
+        });
+        newPage.waitForLoadState();
+    }
+
+    protected void closeCurrentTabAndSwitchToMain(Page currentPage) {
+
+        // If current page is NOT the main page → close it
+        if (currentPage != page) {
+            currentPage.close();
+        }
+
+        // Ensure main page is active
+        page.bringToFront();
+        page.waitForLoadState();
+    }
+
+    protected Page clickAndSwitchToNewPage(Locator locator) {
+
+        String originalUrl = page.url();
+
+        try {
+            // NEW TAB / NEW WINDOW
+            Page newPage = page.context().waitForPage(() -> {
+                locator.click();
+            });
+
+            // Wait until navigation really completes
+            newPage.waitForLoadState();
+            return newPage;
+
+        } catch (Exception e) {
+            // SAME TAB navigation
+            locator.click();
+
+            // Wait until URL actually changes
+            page.waitForURL(url -> !url.equals(originalUrl));
+            return page;
+        }
+    }
+
+
+
+
 }
