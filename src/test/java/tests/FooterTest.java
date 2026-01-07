@@ -111,6 +111,34 @@ public class FooterTest extends BaseTestParallelExecution {
         Assert.assertTrue(footerPage.verifyPageNavigationOfMediacorpDigitalNetworkPageUrlFooterLink(mediacorpDigitalNetworkPageUrl));
     }
 
+    @Test
+    public void verifyPageNavigationOfTermsOfUseFooterLink() {
+        System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
+        FooterPage footerPage = new FooterPage(page());
+        footerPage.open();
+        String termsAndConditionsPageUrl = "https://www.mediacorp.sg/terms-conditions";
+        Assert.assertTrue(footerPage.verifyPageNavigationOfTermsOfUseFooterLink(termsAndConditionsPageUrl));
+    }
+
+
+    @Test
+    public void verifyFooterLinksNavigation() {
+
+        FooterPage footerPage = new FooterPage(page());
+        footerPage.open();
+
+        for (FooterLinkNavigation link : FooterLinkNavigation.values()) {
+
+            test().info("Verifying navigation for: " + link.getLinkText());
+
+            Assert.assertTrue(
+                    footerPage.verifyFooterLinkNavigation(link),
+                    "Navigation failed for footer link: " + link.getLinkText()
+            );
+        }
+
+        test().pass("All footer link navigations verified");
+    }
 
 
 }
