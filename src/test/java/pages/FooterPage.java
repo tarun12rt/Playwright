@@ -188,4 +188,37 @@ public class FooterPage extends BasePage {
         String currentPageUrl = page.url();
         return mediacorpDigitalNetworkPageUrl.equals(currentPageUrl);
     }
+
+    public boolean verifyFooterLinkNavigation(FooterLinkNavigation link) {
+
+        scrollToBottom();
+
+        Locator locator = byText(link.getLinkText());
+        Page navigatedPage = clickAndSwitchToNewPage(locator);
+
+        String actualUrl = navigatedPage.url();
+        String expectedUrl = link.getExpectedUrl();
+
+        // Close new tab or go back
+//        closePageAndSwitchToMain(navigatedPage);
+
+        return actualUrl.contains(expectedUrl);
+    }
+
+    public boolean verifyPageNavigationOfTermsOfUseFooterLink(String termsAndConditionsPageUrl) {
+        scrollTo(about8Days);
+        Page navigatedPage =clickAndSwitchToNewPage(termsOfUse);
+        String actualUrl = navigatedPage.url();
+
+        if (navigatedPage != page) {
+            navigatedPage.close();
+            page.bringToFront();
+        } else {
+            page.goBack();
+            page.waitForLoadState();
+        }
+
+        return termsAndConditionsPageUrl.equals(actualUrl);
+
+    }
 }

@@ -2,14 +2,10 @@ package enums;
 
 public enum FooterLinkNavigation {
 
-    ABOUT_8DAYS("About 8days", "https://www.8days.sg/about"),
-    CONTACT_US("Contact Us", "https://www.8days.sg/contactus"),
+    ABOUT_8DAYS("About 8days", "/about"),
+    CONTACT_US("Contact Us", "/contactus"),
     ADVERTISE("Advertise", "https://www.mediacorp.sg/business/advertising"),
-    TERMS_OF_USE("Terms Of Use", "https://www.8days.sg/mediacorp-digital-network"),
-    PRIVACY_POLICY("Privacy Policy", "https://www.mediacorp.sg/terms-conditions"),
-    VULNERABILITY("Vulnerability Disclosure", "https://www.mediacorp.sg/privacy-policy"),
-    ONLINE_LINKS_POLICY("Online Links Policy", "https://mediacorp.vulnerability-disclosure.com/p/Policy"),
-    MEDIACORP("Mediacorp Digital Network", "https://www.mediacorp.sg/online-links-policy");
+    MEDIACORP_DIGITAL_NETWORK("Mediacorp Digital Network", "/mediacorp-digital-network");
 
     private final String linkText;
     private final String expectedUrl;
@@ -27,3 +23,4 @@ public enum FooterLinkNavigation {
         return expectedUrl;
     }
 }
+
