@@ -107,8 +107,7 @@ public class BasePage {
         try {
             // NEW TAB / NEW WINDOW
             Page newPage = page.context().waitForPage(() -> {
-                locator.click();
-            });
+                locator.click();});
 
             // Wait until navigation really completes
             newPage.waitForLoadState();
@@ -121,6 +120,20 @@ public class BasePage {
             // Wait until URL actually changes
             page.waitForURL(url -> !url.equals(originalUrl));
             return page;
+        }
+    }
+    protected void restoreToOriginalPage(Page navigatedPage) {
+
+        // New tab / window
+        if (navigatedPage != page) {
+            navigatedPage.close();
+            page.bringToFront();
+            page.waitForLoadState();
+        }
+        // Same tab navigation
+        else {
+            page.goBack();
+            page.waitForLoadState();
         }
     }
 
