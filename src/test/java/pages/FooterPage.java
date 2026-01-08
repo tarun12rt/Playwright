@@ -191,19 +191,31 @@ public class FooterPage extends BasePage {
 
     public boolean verifyFooterLinkNavigation(FooterLinkNavigation link) {
 
-        scrollToBottom();
+        // 1️⃣ Scroll to footer
+        scrollTo(about8Days);
 
         Locator locator = byText(link.getLinkText());
+
+        // 2️⃣ Click & get navigated page (same tab or new tab)
         Page navigatedPage = clickAndSwitchToNewPage(locator);
+
+        // 3️⃣ Wait until URL is available
+        navigatedPage.waitForURL(url -> url != null && !url.isEmpty());
 
         String actualUrl = navigatedPage.url();
         String expectedUrl = link.getExpectedUrl();
 
-        // Close new tab or go back
-//        closePageAndSwitchToMain(navigatedPage);
+        boolean isNavigationCorrect = actualUrl.contains(expectedUrl);
 
-        return actualUrl.contains(expectedUrl);
+        // 4️⃣ Restore state (VERY IMPORTANT)
+        restoreToOriginalPage(navigatedPage);
+
+        // 5️⃣ Scroll back to footer for next iteration
+        scrollTo(about8Days);
+
+        return isNavigationCorrect;
     }
+
 
     public boolean verifyPageNavigationOfTermsOfUseFooterLink(String termsAndConditionsPageUrl) {
         scrollTo(about8Days);
