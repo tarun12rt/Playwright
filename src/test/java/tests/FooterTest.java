@@ -128,7 +128,6 @@ public class FooterTest extends BaseTestParallelExecution {
         footerPage.open();
 
         for (FooterLinkNavigation link : FooterLinkNavigation.values()) {
-
             test().info("Verifying navigation for: " + link.getLinkText());
 
             Assert.assertTrue(
@@ -139,6 +138,7 @@ public class FooterTest extends BaseTestParallelExecution {
 
         test().pass("All footer link navigations verified");
     }
+
 
 
 

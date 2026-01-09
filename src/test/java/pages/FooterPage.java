@@ -2,6 +2,7 @@ package pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.LoadState;
 import config.Config;
 import enums.FooterLinkNavigation;
 
@@ -191,30 +192,24 @@ public class FooterPage extends BasePage {
 
     public boolean verifyFooterLinkNavigation(FooterLinkNavigation link) {
 
-        // 1️⃣ Scroll to footer
-        scrollTo(about8Days);
+        Locator locator = page.locator("footer")
+                              .getByText(link.getLinkText());
 
-        Locator locator = byText(link.getLinkText());
-
-        // 2️⃣ Click & get navigated page (same tab or new tab)
         Page navigatedPage = clickAndSwitchToNewPage(locator);
 
-        // 3️⃣ Wait until URL is available
-        navigatedPage.waitForURL(url -> url != null && !url.isEmpty());
+        navigatedPage.waitForLoadState(LoadState.NETWORKIDLE);
 
         String actualUrl = navigatedPage.url();
-        String expectedUrl = link.getExpectedUrl();
+        boolean isNavigationCorrect =
+                actualUrl.contains(link.getExpectedUrl());
 
-        boolean isNavigationCorrect = actualUrl.contains(expectedUrl);
-
-        // 4️⃣ Restore state (VERY IMPORTANT)
         restoreToOriginalPage(navigatedPage);
 
-        // 5️⃣ Scroll back to footer for next iteration
         scrollTo(about8Days);
 
         return isNavigationCorrect;
     }
+
 
 
     public boolean verifyPageNavigationOfTermsOfUseFooterLink(String termsAndConditionsPageUrl) {

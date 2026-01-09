@@ -1,5 +1,6 @@
 package pages;
 
+import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
@@ -102,24 +103,27 @@ public class BasePage {
 
     protected Page clickAndSwitchToNewPage(Locator locator) {
 
-        String originalUrl = page.url();
+        Page originalPage = page;
+        BrowserContext context = page.context();
+        int pagesBeforeClick = context.pages().size();
 
-        try {
-            // NEW TAB / NEW WINDOW
-            Page newPage = page.context().waitForPage(() -> {
-                locator.click();});
+        // Click the element
+        locator.click();
 
-            // Wait until navigation really completes
+        // Check if new tab/window opened
+        if (context.pages().size() > pagesBeforeClick) {
+
+            Page newPage = context.pages().get(context.pages().size() - 1);
+
             newPage.waitForLoadState();
+
+            System.out.println("✅ New tab/window opened. Switched to new page.");
             return newPage;
 
-        } catch (Exception e) {
-            // SAME TAB navigation
-            locator.click();
-
-            // Wait until URL actually changes
-            page.waitForURL(url -> !url.equals(originalUrl));
-            return page;
+        } else {
+            page.waitForLoadState();
+            System.out.println("ℹ️ Clicked element and remained on the same page.");
+            return originalPage;
         }
     }
     protected void restoreToOriginalPage(Page navigatedPage) {
