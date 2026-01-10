@@ -84,148 +84,21 @@ public class FooterPage extends BasePage {
         return b1 && b2 && b3 && b4;
     }
 
-    public boolean verifyNavigation(Page navigatedPage, FooterLinkNavigation link) {
-        return navigatedPage.url().contains(link.getExpectedUrl());
-    }
-    public Page clickFooterLink(FooterLinkNavigation link) {
-
-        Locator footerLink = byText(link.getLinkText());
-        scrollTo(footerLink);
-
-        System.out.println("Clicking footer link UI text: " + link.getLinkText());
-
-        try {
-            Page newPage = page.context().waitForPage(() -> {
-                footerLink.click();
-            });
-            newPage.waitForLoadState();
-            return newPage;
-
-        } catch (Exception e) {
-            footerLink.click();
-            page.waitForLoadState();
-            return page;
-        }
-    }
-
-
-    public String resolveExpectedUrl(FooterLinkNavigation link) {
-        String expected = link.getExpectedUrl();
-
-        // External URLs (absolute)
-        if (expected.startsWith("https")) {
-            return expected;
-        }
-
-        // Internal URLs (relative)
-        return Config.get("baseUrl") + expected;
-    }
-
-    public Page clickFooterLinkAndReturn(FooterLinkNavigation link) {
-
-        Locator footerLink = byText(link.getLinkText());
-        scrollTo(footerLink);
-
-        Page navigatedPage;
-
-        try {
-            // NEW TAB case
-            navigatedPage = page.context().waitForPage(() -> {
-                footerLink.click();
-            });
-            navigatedPage.waitForLoadState();
-            return navigatedPage;
-
-        } catch (Exception e) {
-            // SAME TAB case
-            footerLink.click();
-            page.waitForLoadState();
-            return page;
-        }
-    }
-    public void returnToHome(Page navigatedPage) {
-
-        // New tab → close it
-        if (navigatedPage != page) {
-            navigatedPage.close();
-        }
-        // Same tab → go back
-        else {
-            page.goBack();
-            page.waitForLoadState();
-        }
-
-        // Scroll footer again for next link
-        scrollTo(byText("Online Links Policy"));
-    }
-
-    public boolean verifyPageNavigationOfAbout8DaysFooterLink(String aboutDaysPageUrl) {
-        scrollTo(about8Days);
-        safeClick(about8Days);
-        String currentPageUrl = page.url();
-        return aboutDaysPageUrl.equals(currentPageUrl);
-
-    }
-
-
-    public boolean verifyPageNavigationOfContactUsFooterLink(String contactUsPageUrl) {
-        scrollTo(about8Days);
-        safeClick(contactUs);
-        String currentPageUrl = page.url();
-        return contactUsPageUrl.equals(currentPageUrl);
-    }
-
-    public boolean verifyPageNavigationOfAdvertiseFooterLink(String advertisePageUrl) {
-        scrollTo(about8Days);
-        Page navigatedPage = clickAndSwitchToNewPage(advertise);
-        String currentPageUrl = navigatedPage.url();
-        return currentPageUrl.contains(advertisePageUrl);
-    }
-
-
-    public boolean verifyPageNavigationOfMediacorpDigitalNetworkPageUrlFooterLink(String mediacorpDigitalNetworkPageUrl) {
-        scrollTo(about8Days);
-        safeClick(mediacorpDigitalNetwork);
-        String currentPageUrl = page.url();
-        return mediacorpDigitalNetworkPageUrl.equals(currentPageUrl);
-    }
 
     public boolean verifyFooterLinkNavigation(FooterLinkNavigation link) {
+        scrollTo(about8Days);
 
-        Locator locator = page.locator("footer")
-                              .getByText(link.getLinkText());
+        Locator locator = page.locator("footer").getByText(link.getLinkText());
 
         Page navigatedPage = clickAndSwitchToNewPage(locator);
 
-        navigatedPage.waitForLoadState(LoadState.NETWORKIDLE);
-
         String actualUrl = navigatedPage.url();
-        boolean isNavigationCorrect =
-                actualUrl.contains(link.getExpectedUrl());
+        boolean isNavigationCorrect = actualUrl.contains(link.getExpectedUrl());
 
         restoreToOriginalPage(navigatedPage);
 
         scrollTo(about8Days);
 
         return isNavigationCorrect;
-    }
-
-
-
-    public boolean verifyPageNavigationOfTermsOfUseFooterLink(String termsAndConditionsPageUrl) {
-        scrollTo(about8Days);
-        Page navigatedPage =clickAndSwitchToNewPage(termsOfUse);
-        String actualUrl = navigatedPage.url();
-
-        if (navigatedPage != page) {
-            navigatedPage.close();
-            page.bringToFront();
-        } else {
-            page.goBack();
-            page.waitForLoadState();
-        }
-
-        return termsAndConditionsPageUrl.equals(actualUrl);
-
     }
 }

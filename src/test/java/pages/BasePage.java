@@ -101,7 +101,7 @@ public class BasePage {
         page.waitForLoadState();
     }
 
-    protected Page clickAndSwitchToNewPage(Locator locator) {
+    /*protected Page clickAndSwitchToNewPage(Locator locator) {
 
         Page originalPage = page;
         BrowserContext context = page.context();
@@ -125,7 +125,30 @@ public class BasePage {
             System.out.println("ℹ️ Clicked element and remained on the same page.");
             return originalPage;
         }
+    }*/
+
+    protected Page clickAndSwitchToNewPage(Locator locator) {
+
+        Page originalPage = page;
+        BrowserContext context = page.context();
+
+        try {
+            // detect new tab/window
+            Page newPage = context.waitForPage(() -> locator.click());
+
+            newPage.waitForLoadState();
+            System.out.println("✅ New tab/window opened. Switched to new page.");
+            return newPage;
+
+        } catch (Exception e) {
+            // Same tab navigation
+            locator.click();
+            page.waitForLoadState();
+            System.out.println("ℹ️ Clicked element and remained on the same page.");
+            return originalPage;
+        }
     }
+
     protected void restoreToOriginalPage(Page navigatedPage) {
 
         // New tab / window
