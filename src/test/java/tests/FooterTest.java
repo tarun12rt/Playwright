@@ -44,4 +44,12 @@ public class FooterTest extends BaseTestParallelExecution {
         }
     }
 
+    @Test
+    public void verifyFooterHighlightedTextContent() {
+        FooterPage footerPage = new FooterPage(page());
+        footerPage.open();
+        Assert.assertTrue(footerPage.verifyFooterHighlightedTexts());
+    }
+
+
 }
