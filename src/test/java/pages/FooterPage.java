@@ -23,22 +23,31 @@ public class FooterPage extends BasePage {
     private final Locator eatAndDrink;
     private final Locator seeAndDo;
     private final Locator liveAndLearn;
+    private final Locator footerLogo;
+    private final Locator categorySection;
+    private final Locator spamTitle;
+    private final Locator spamDescription;
+    private final Locator consentText;
 
     public FooterPage(Page page) {
         super(page);
-        this.onlineLinksPolicy = page.getByText("Online Links Policy");
-        this.about8Days = page.getByText("About 8days");
-        this.contactUs = page.locator("//a[normalize-space()='Contact Us']");
-        this.advertise = page.locator("//a[normalize-space()='Advertise']");
-        this.mediacorpDigitalNetwork = page.getByText("Mediacorp Digital Network");
-        this.termsOfUse = page.getByText("Terms Of Use");
-        this.privacyPolicy = page.getByText("Privacy Policy");
-        this.vulnerabilityDisclosure = page.getByText("Vulnerability Disclosure");
-        this.entertainment = page.locator("//a[normalize-space()='ENTERTAINMENT']");
-        this.eatAndDrink = page.locator("//a[normalize-space()='EAT & DRINK']");
-        this.seeAndDo = page.locator("//a[normalize-space()='SEE & DO']");
-        this.liveAndLearn = page.locator("//a[normalize-space()='LIVE & LEARN']");
-
+        onlineLinksPolicy = page.getByText("Online Links Policy");
+        about8Days = page.getByText("About 8days");
+        contactUs = page.locator("//a[normalize-space()='Contact Us']");
+        advertise = page.locator("//a[normalize-space()='Advertise']");
+        mediacorpDigitalNetwork = page.getByText("Mediacorp Digital Network");
+        termsOfUse = page.getByText("Terms Of Use");
+        privacyPolicy = page.getByText("Privacy Policy");
+        vulnerabilityDisclosure = page.getByText("Vulnerability Disclosure");
+        entertainment = page.locator("//a[normalize-space()='ENTERTAINMENT']");
+        eatAndDrink = page.locator("//a[normalize-space()='EAT & DRINK']");
+        seeAndDo = page.locator("//a[normalize-space()='SEE & DO']");
+        liveAndLearn = page.locator("//a[normalize-space()='LIVE & LEARN']");
+        footerLogo = page.locator("//footer//img[@alt='Logo']");
+        categorySection = page.locator("text=ENTERTAINMENT");
+        spamTitle = page.getByText("We Hate Spam");
+        spamDescription = page.locator("//p[@class='subscription__sub-heading']");
+        consentText = page.locator(".subscription__term-condition");
 
     }
 
@@ -101,4 +110,15 @@ public class FooterPage extends BasePage {
 
         return isNavigationCorrect;
     }
+
+    public boolean verifyFooterHighlightedTexts() {
+
+        scrollTo(about8Days);
+
+        return safeIsVisible(footerLogo)
+                && safeIsVisible(spamTitle)
+                && safeIsVisible(spamDescription)
+                && safeIsVisible(consentText);
+    }
+
 }
