@@ -1,14 +1,16 @@
 package tests;
 
 import base.BaseTestParallelExecution;
-import com.microsoft.playwright.Page;
+import enums.FooterCategoryLink;
 import enums.FooterLinkNavigation;
+import enums.FooterSocialLink;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.FooterPage;
 
 
 public class FooterTest extends BaseTestParallelExecution {
+
 
     @Test
     public void verify8DaysFooter() {
@@ -34,10 +36,19 @@ public class FooterTest extends BaseTestParallelExecution {
     }
 
     @Test
-    public void verifyFooterLinksNavigation() {
+    public void verifyFooterHighlightedTextContent() {
+        System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
 
+        FooterPage footerPage = new FooterPage(page());
+        footerPage.open();
+        Assert.assertTrue(footerPage.verifyFooterHighlightedTexts());
+    }
+
+    @Test
+    public void verifyFooterNavigationLinks() {
         System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
         FooterPage footerPage = new FooterPage(page());
+
         footerPage.open();
         for (FooterLinkNavigation link : FooterLinkNavigation.values()) {
             Assert.assertTrue(footerPage.verifyFooterLinkNavigation(link));
@@ -45,11 +56,30 @@ public class FooterTest extends BaseTestParallelExecution {
     }
 
     @Test
-    public void verifyFooterHighlightedTextContent() {
+    public void verifyFooterCategoryLinks() {
+        System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
+
         FooterPage footerPage = new FooterPage(page());
         footerPage.open();
-        Assert.assertTrue(footerPage.verifyFooterHighlightedTexts());
+        for (FooterCategoryLink link : FooterCategoryLink.values()) {
+            Assert.assertTrue(footerPage.verifyFooterCategoryNavigation(link));
+        }
     }
+
+    @Test
+    public void verifyFooterSocialMediaLinks() {
+        System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
+
+        FooterPage footerPage = new FooterPage(page());
+        footerPage.open();
+        for (FooterSocialLink link : FooterSocialLink.values()) {
+            Assert.assertTrue(footerPage.verifyFooterSocialMediaNavigation(link));
+        }
+    }
+
+
+
+
 
 
 }
