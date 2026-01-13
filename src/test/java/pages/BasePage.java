@@ -136,7 +136,7 @@ public class BasePage {
             // detect new tab/window
             Page newPage = context.waitForPage(() -> locator.click());
 
-            newPage.waitForLoadState();
+//            newPage.waitForLoadState();
             System.out.println("✅ New tab/window opened. Switched to new page.");
             return newPage;
 
