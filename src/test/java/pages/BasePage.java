@@ -163,8 +163,34 @@ public class BasePage {
             page.waitForLoadState();
         }
     }
+public static void click(Locator locator) {
+    locator.waitFor();
+    locator.click();
+}
+    public static void type(Locator locator, String text) {
+    locator.waitFor();
+    locator.fill(text);
+}
 
+public static String getText(Locator locator) {
+    locator.waitFor();
+    return locator.textContent().trim();
+}
 
+    public static void waitForVisible(Locator locator) {
+    locator.waitFor(new Locator.WaitForOptions()
+            .setState(WaitForSelectorState.VISIBLE));
+}
 
+    public static Page switchToNewPage(Page page, Runnable action) {
+    BrowserContext context = page.context();
+    Page newPage = context.waitForPage(action);
+    newPage.waitForLoadState();
+    return newPage;
+}
+
+    public static void selectByValue(Locator locator, String value) {
+    locator.selectOption(value);
+}
 
 }
