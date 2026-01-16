@@ -192,5 +192,40 @@ public static String getText(Locator locator) {
     public static void selectByValue(Locator locator, String value) {
     locator.selectOption(value);
 }
+public static int getElementCount(Page page, String selector) {
+    return page.locator(selector).count();
+}
+    
+public static void jsClick(Page page, String selector) {
+    page.evaluate("document.querySelector(arguments[0]).click()", selector);
+}
+  public static void retryClick(Locator locator, int attempts) {
+    for (int i = 0; i < attempts; i++) {
+        try {
+            locator.click();
+            break;
+        } catch (Exception e) {
+            if (i == attempts - 1) throw e;
+        }
+    }
+}
 
+    public static void assertText(Locator locator, String expected) {
+    String actual = locator.textContent().trim();
+    Assertions.assertEquals(expected, actual);
+}
+
+    public static void takeScreenshot(Page page, String name) {
+    page.screenshot(new Page.ScreenshotOptions()
+            .setPath(Paths.get("screenshots/" + name + ".png"))
+            .setFullPage(true));
+}
+
+    public static void scrollIntoView(Locator locator) {
+    locator.scrollIntoViewIfNeeded();
+}
+
+    public static void selectByValue(Locator locator, String value) {
+    locator.selectOption(value);
+}
 }
