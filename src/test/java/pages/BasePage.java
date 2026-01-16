@@ -228,4 +228,15 @@ public static void jsClick(Page page, String selector) {
     public static void selectByValue(Locator locator, String value) {
     locator.selectOption(value);
 }
+
+    Page childPage = WindowUtils.switchToNewPage(page, () -> {
+    page.click("#openTab");
+});
+
+    public static Page switchToNewPage(Page page, Runnable action) {
+    BrowserContext context = page.context();
+    Page newPage = context.waitForPage(action);
+    newPage.waitForLoadState();
+    return newPage;
+}
 }
