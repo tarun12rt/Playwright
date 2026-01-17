@@ -101,32 +101,6 @@ public class BasePage {
         page.waitForLoadState();
     }
 
-    /*protected Page clickAndSwitchToNewPage(Locator locator) {
-
-        Page originalPage = page;
-        BrowserContext context = page.context();
-        int pagesBeforeClick = context.pages().size();
-
-        // Click the element
-        locator.click();
-
-        // Check if new tab/window opened
-        if (context.pages().size() > pagesBeforeClick) {
-
-            Page newPage = context.pages().get(context.pages().size() - 1);
-
-            newPage.waitForLoadState();
-
-            System.out.println("✅ New tab/window opened. Switched to new page.");
-            return newPage;
-
-        } else {
-            page.waitForLoadState();
-            System.out.println("ℹ️ Clicked element and remained on the same page.");
-            return originalPage;
-        }
-    }*/
-
     protected Page clickAndSwitchToNewPage(Locator locator) {
 
         Page originalPage = page;
