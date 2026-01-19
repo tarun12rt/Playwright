@@ -33,6 +33,10 @@ public class BasePage {
         );
     }
 
+    protected void waitForUrlContains(String partialUrl) {
+        page.waitForURL(url -> url.contains(partialUrl));
+    }
+
     /* ================= SAFE ACTIONS ================= */
 
     protected void safeClick(Locator locator) {
@@ -40,8 +44,20 @@ public class BasePage {
         locator.click();
     }
 
+    protected void clickIfVisible(Locator locator) {
+        if (locator.isVisible()) {
+            locator.click();
+        }
+    }
+
     protected void safeFill(Locator locator, String text) {
         waitForVisible(locator);
+        locator.fill(text);
+    }
+
+    protected void clearAndFill(Locator locator, String text) {
+        waitForVisible(locator);
+        locator.clear();
         locator.fill(text);
     }
 
@@ -52,6 +68,17 @@ public class BasePage {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    /* ================= TEXT UTILITIES ================= */
+
+    protected String getText(Locator locator) {
+        waitForVisible(locator);
+        return locator.textContent().trim();
+    }
+
+    protected boolean isTextPresent(String text) {
+        return page.getByText(text).isVisible();
     }
 
     /* ================= SCROLL UTILITIES ================= */
@@ -74,6 +101,10 @@ public class BasePage {
         return page.title();
     }
 
+    protected String getCurrentUrl() {
+        return page.url();
+    }
+
     protected Locator byText(String text) {
         return page.getByText(text);
     }
@@ -82,59 +113,47 @@ public class BasePage {
         return page.locator(css);
     }
 
-    protected void switchToNewTab() {
-        Page newPage = page.context().waitForPage(() -> {
-            // action that opens new tab must be triggered before calling this
-        });
-        newPage.waitForLoadState();
-    }
-
-    protected void closeCurrentTabAndSwitchToMain(Page currentPage) {
-
-        // If current page is NOT the main page → close it
-        if (currentPage != page) {
-            currentPage.close();
-        }
-
-        // Ensure main page is active
-        page.bringToFront();
-        page.waitForLoadState();
-    }
+    /* ================= TAB / WINDOW HANDLING ================= */
 
     protected Page clickAndSwitchToNewPage(Locator locator) {
 
-        Page originalPage = page;
         BrowserContext context = page.context();
+        int pagesBefore = context.pages().size();
 
-        try {
-            // detect new tab/window
-            Page newPage = context.waitForPage(() -> locator.click());
+        locator.click();
 
-//            newPage.waitForLoadState();
-            System.out.println("✅ New tab/window opened. Switched to new page.");
+        // Wait briefly for new tab
+        page.waitForTimeout(500);
+
+        if (context.pages().size() > pagesBefore) {
+            Page newPage = context.pages().get(context.pages().size() - 1);
+            newPage.waitForLoadState();
+            System.out.println("✅ New tab/window opened");
             return newPage;
-
-        } catch (Exception e) {
-            // Same tab navigation
-            locator.click();
-            page.waitForLoadState();
-            System.out.println("ℹ️ Clicked element and remained on the same page.");
-            return originalPage;
         }
+
+        page.waitForLoadState();
+        System.out.println("ℹ️ Stayed on same page");
+        return page;
     }
 
     protected void restoreToOriginalPage(Page navigatedPage) {
 
-        // New tab / window
         if (navigatedPage != page) {
             navigatedPage.close();
             page.bringToFront();
             page.waitForLoadState();
-        }
-        // Same tab navigation
-        else {
+        } else {
             page.goBack();
             page.waitForLoadState();
         }
+    }
+
+    protected boolean isNewTabOpened(Page navigatedPage) {
+        return navigatedPage != page;
+    }
+
+    protected Page getMainPage() {
+        return page;
     }
 }
