@@ -78,7 +78,7 @@ public class LoginPage extends BasePage {
     }
 
     public void clickSignIn() {
-//        safeClick(signInButton);
+        safeClick(signInButton);
     }
 
     public void clickProfileIcon() {
