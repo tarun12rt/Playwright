@@ -3,52 +3,44 @@ package tests;
 import base.BaseTestParallelExecution;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.FooterPage;
 import pages.LoginPage;
 
 public class LoginTest extends BaseTestParallelExecution {
 
-    @Test
-    public void verifyLoginPageUI() {
-
+    private LoginPage getLoginPage() {
+        System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
         LoginPage loginPage = new LoginPage(page());
         loginPage.open();
         loginPage.clickProfileIcon();
+        return loginPage;
+    }
+
+    @Test(groups = "login")
+    public void verifyLoginPageUI() {
+        LoginPage loginPage = getLoginPage();
         Assert.assertTrue(loginPage.isLoginFormVisible());
     }
 
-    @Test
+    @Test(groups = "login")
     public void verifySocialLoginButtonsAreVisible() {
-
-        LoginPage loginPage = new LoginPage(page());
-        loginPage.open();
+        LoginPage loginPage = getLoginPage();
         Assert.assertTrue(loginPage.areSocialLoginButtonsVisible());
     }
 
-    @Test
+    @Test(groups = "login")
     public void verifyFooterLinksAreVisibleOnLoginPage() {
-
-        LoginPage loginPage = new LoginPage(page());
-        loginPage.open();
+        LoginPage loginPage = getLoginPage();
         Assert.assertTrue(loginPage.areFooterLinksVisible());
     }
 
-    @Test
+    @Test(groups = "login")
     public void verifyLoginWithInvalidCredentialsShowsError() {
-
-        LoginPage loginPage = new LoginPage(page());
-        loginPage.open();
-
+        LoginPage loginPage = getLoginPage();
         loginPage.enterEmail("invalid@email.com");
         loginPage.enterPassword("wrongPassword");
         loginPage.clickSignIn();
-
-        // Example: URL should not change to dashboard
         Assert.assertTrue(
-                page().url().contains("auth.mediacorp.sg"),
-                "Unexpected navigation after invalid login"
+                loginPage.verifyErrorsMessage("Invalid email or password")
         );
-
-        test().pass("Invalid login scenario verified");
     }
 }

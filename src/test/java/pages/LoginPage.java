@@ -21,12 +21,13 @@ public class LoginPage extends BasePage {
     private final Locator reportVulnerability;
     private final Locator onlineLinksPolicy;
     private final Locator headerProfileIcon;
+    private final Locator loginErrorMessage;
 
     public LoginPage(Page page) {
         super(page);
 
-        emailInput = page.getByLabel("Email");
-        passwordInput = page.getByLabel("Password");
+        emailInput = page.locator("#username");
+        passwordInput = page.locator("#password");
         signInButton = page.locator("(//button[@type='submit'])[2]");
 
         forgotPasswordLink = page.getByText("Forgot your password?");
@@ -36,17 +37,18 @@ public class LoginPage extends BasePage {
         continueWithFacebook = page.getByText("Continue with Facebook");
         continueWithGoogle = page.getByText("Continue with Google");
 
-        termsOfService = page.getByText("Terms of Services");
-        privacyPolicy = page.getByText("Privacy Policy");
-        reportVulnerability = page.getByText("Report Vulnerability");
-        onlineLinksPolicy = page.getByText("Online Links Policy");
+        termsOfService = page.locator("//a[normalize-space()='Terms of Services']");
+        privacyPolicy = page.locator("//a[normalize-space()='Privacy Policy']");
+        reportVulnerability = page.locator("//a[normalize-space()='Report Vulnerability']");
+        onlineLinksPolicy = page.locator("//a[normalize-space()='Online Links Policy']");
 
-        headerProfileIcon = page.locator("a.sign-in-link[href*='/profile/sso/login']");
+        headerProfileIcon = page.locator("(//nav[@id='profile-menu-nav']//a)[1]");
+        loginErrorMessage=page.getByText("Invalid email or password");
     }
 
     // --- Actions ---
     public void open() {
-        page.navigate("https://auth.mediacorp.sg/login");
+        openBaseUrl();
     }
 
     // --- Verifications ---
@@ -63,6 +65,7 @@ public class LoginPage extends BasePage {
     }
 
     public boolean areFooterLinksVisible() {
+        scrollTo(termsOfService);
         return safeIsVisible(termsOfService)
                 && safeIsVisible(privacyPolicy)
                 && safeIsVisible(reportVulnerability)
@@ -83,5 +86,10 @@ public class LoginPage extends BasePage {
 
     public void clickProfileIcon() {
         safeClick(headerProfileIcon);
+    }
+
+    public boolean verifyErrorsMessage(String errorMessage) {
+        String actualText = getText(loginErrorMessage);
+        return actualText.equals(errorMessage);
     }
 }
