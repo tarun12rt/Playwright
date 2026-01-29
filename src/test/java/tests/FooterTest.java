@@ -8,64 +8,60 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.FooterPage;
 
-
 public class FooterTest extends BaseTestParallelExecution {
 
+    private FooterPage getFooterPage() {
+        System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
+        FooterPage footerPage = new FooterPage(page());
+        footerPage.open();
+        return footerPage;
+    }
 
     @Test
     public void verify8DaysFooter() {
-        System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
-        FooterPage footerPage = new FooterPage(page());
-        footerPage.open();
-        Assert.assertTrue(footerPage.verifyFooterIsVisible(),"Footer is not visible");
+        FooterPage footerPage = getFooterPage();
+        Assert.assertTrue(
+                footerPage.verifyFooterIsVisible(),
+                "Footer is not visible"
+        );
     }
-
 
     @Test
     public void verifyFooterHighlightedTextContent() {
-        System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
-
-        FooterPage footerPage = new FooterPage(page());
-        footerPage.open();
+        FooterPage footerPage = getFooterPage();
         Assert.assertTrue(footerPage.verifyFooterHighlightedTexts());
     }
 
     @Test
     public void verifyFooterNavigationLinks() {
-        System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
-        FooterPage footerPage = new FooterPage(page());
-
-        footerPage.open();
+        FooterPage footerPage = getFooterPage();
         for (FooterLinkNavigation link : FooterLinkNavigation.values()) {
-            Assert.assertTrue(footerPage.verifyFooterLinkNavigation(link));
+            Assert.assertTrue(
+                    footerPage.verifyFooterLinkNavigation(link),
+                    "Footer navigation failed for: " + link
+            );
         }
     }
 
     @Test
     public void verifyFooterCategoryLinks() {
-        System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
-
-        FooterPage footerPage = new FooterPage(page());
-        footerPage.open();
+        FooterPage footerPage = getFooterPage();
         for (FooterCategoryLink link : FooterCategoryLink.values()) {
-            Assert.assertTrue(footerPage.verifyFooterCategoryNavigation(link));
+            Assert.assertTrue(
+                    footerPage.verifyFooterCategoryNavigation(link),
+                    "Footer category failed for: " + link
+            );
         }
     }
 
     @Test
     public void verifyFooterSocialMediaLinks() {
-        System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
-
-        FooterPage footerPage = new FooterPage(page());
-        footerPage.open();
+        FooterPage footerPage = getFooterPage();
         for (FooterSocialLink link : FooterSocialLink.values()) {
-            Assert.assertTrue(footerPage.verifyFooterSocialMediaNavigation(link));
+            Assert.assertTrue(
+                    footerPage.verifyFooterSocialMediaNavigation(link),
+                    "Footer social link failed for: " + link
+            );
         }
     }
-
-
-
-
-
-
 }
