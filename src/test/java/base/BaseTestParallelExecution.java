@@ -7,7 +7,6 @@ import org.testng.annotations.*;
 import utils.BrowserFactory;
 import utils.ExtentManager;
 import config.Config;
-import utils.TimeUtil;
 
 import java.lang.reflect.Method;
 import java.nio.file.Files;
@@ -16,131 +15,143 @@ import java.nio.file.Paths;
 
 public class BaseTestParallelExecution {
 
-    // ===== ThreadLocal objects =====
-    private static ThreadLocal<Playwright> tlPlaywright = new ThreadLocal<>();
-    private static ThreadLocal<Browser> tlBrowser = new ThreadLocal<>();
-    private static ThreadLocal<BrowserContext> tlContext = new ThreadLocal<>();
-    private static ThreadLocal<Page> tlPage = new ThreadLocal<>();
-    private static ThreadLocal<ExtentTest> tlTest = new ThreadLocal<>();
+    private static ThreadLocal<Playwright> playwright = new ThreadLocal<>();
+    private static ThreadLocal<Browser> browser = new ThreadLocal<>();
+    private static ThreadLocal<BrowserContext> context = new ThreadLocal<>();
+    private static ThreadLocal<Page> page = new ThreadLocal<>();
+    private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
-    protected static ExtentReports extent;
+    private static ExtentReports extent;
 
-    // ===== Accessors (IMPORTANT) =====
     protected Page page() {
-        return tlPage.get();
+        return page.get();
     }
 
     protected ExtentTest test() {
-        return tlTest.get();
+        return test.get();
     }
 
-    /* ================= SETUP ================= */
+    /* ================= SUITE SETUP ================= */
 
     @BeforeSuite(alwaysRun = true)
     public void startReport() {
         extent = ExtentManager.getExtent();
     }
 
-    @BeforeMethod(alwaysRun = true)
-    public void setupTest(Method method) {
+    /* ================= TEST SETUP ================= */
 
-        tlPlaywright.set(Playwright.create());
-        tlBrowser.set(BrowserFactory.getBrowser(tlPlaywright.get()));
+    @BeforeMethod(alwaysRun = true)
+    public void setUp(Method method) {
+
+        Playwright pw = Playwright.create();
+        playwright.set(pw);
+
+        Browser br = BrowserFactory.getBrowser(pw);
+        browser.set(br);
 
         Browser.NewContextOptions options = new Browser.NewContextOptions();
 
         if (Config.getBoolean("video.recording")) {
-            options.setRecordVideoDir(Paths.get("videos"))
+            options.setRecordVideoDir(Paths.get("test-output/videos"))
                    .setRecordVideoSize(1280, 720);
         }
 
-        tlContext.set(tlBrowser.get().newContext(options));
+        BrowserContext ctx = br.newContext(options);
+        context.set(ctx);
 
-        tlContext.get().tracing().start(
-                new Tracing.StartOptions()
-                        .setScreenshots(true)
-                        .setSnapshots(true)
-                        .setSources(true)
-        );
+        Page pg = ctx.newPage();
+        page.set(pg);
 
-        tlPage.set(tlContext.get().newPage());
-        tlTest.set(extent.createTest(method.getName()));
+        test.set(extent.createTest(method.getName()));
     }
 
-    /* ================= TEARDOWN ================= */
+    /* ================= TEST TEARDOWN ================= */
 
     @AfterMethod(alwaysRun = true)
-    public void tearDownTest(ITestResult result) {
+    public void tearDown(ITestResult result) {
+
+        Page currentPage = page.get();
+        BrowserContext currentContext = context.get();
 
         try {
-            tlContext.get().tracing().stop(
-                    new Tracing.StopOptions()
-                            .setPath(Paths.get("traces/" + result.getName() + ".zip"))
-            );
-        } catch (Exception ignored) {}
 
-        if (result.getStatus() == ITestResult.FAILURE) {
-            try {
+            /* ---------- Screenshot on failure ---------- */
+            if (result.getStatus() == ITestResult.FAILURE && currentPage != null) {
+
+                Path screenshotDir = Paths.get("test-output/screenshots");
+                Files.createDirectories(screenshotDir);
+
                 Path screenshotPath =
-                        Paths.get("screenshots", result.getName() + ".png");
-                Files.createDirectories(screenshotPath.getParent());
+                        screenshotDir.resolve(result.getName() + ".png");
 
-                page().screenshot(
+                currentPage.screenshot(
                         new Page.ScreenshotOptions().setPath(screenshotPath)
                 );
 
-                test().fail(result.getThrowable());
-                test().addScreenCaptureFromPath(screenshotPath.toString());
-
-            } catch (Exception e) {
-                e.printStackTrace();
+                test.get().fail(result.getThrowable());
+                test.get().addScreenCaptureFromPath(
+                        "../screenshots/" + screenshotPath.getFileName()
+                );
             }
-        }
 
-        // Close context FIRST (video finalizes here)
-        tlContext.get().close();
-
-        // Handle video
-        try {
-            if (Config.getBoolean("video.recording")) {
-
-                Path originalVideo = page().video().path();
-                Path targetDir = Paths.get("videos");
-                Files.createDirectories(targetDir);
-
-                Path renamedVideo =
-                        targetDir.resolve(
-                                result.getName() + "_" + TimeUtil.getTimestamp() + ".webm"
-                        );
-
-                if (Config.getBoolean("video.onFailureOnly")) {
-                    if (result.getStatus() == ITestResult.FAILURE) {
-                        Files.move(originalVideo, renamedVideo);
-                    } else {
-                        Files.deleteIfExists(originalVideo);
-                    }
-                } else {
-                    Files.move(originalVideo, renamedVideo);
-                }
+            /* ---------- CLOSE CONTEXT FIRST (CRITICAL) ---------- */
+            if (currentContext != null) {
+                currentContext.close();
             }
+
+            /* ---------- Attach VIDEO ONLY for FAILED tests ---------- */
+            if (result.getStatus() == ITestResult.FAILURE
+                    && currentPage != null
+                    && currentPage.video() != null) {
+
+                Path videoDir = Paths.get("test-output/videos");
+                Files.createDirectories(videoDir);
+
+                Path videoPath = currentPage.video().path();
+                Path finalVideo =
+                        videoDir.resolve(result.getName() + ".webm");
+
+                Files.move(videoPath, finalVideo);
+
+                String relativeVideoPath =
+                        "../videos/" + finalVideo.getFileName();
+
+                // ✅ ONLY reliable way to show video in Extent
+                test.get().info(
+                        "<video width='720' height='405' controls>" +
+                                "<source src='" + relativeVideoPath + "' type='video/webm'>" +
+                                "Your browser does not support the video tag." +
+                                "</video>"
+                );
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+
+            /* ---------- HARD CLEANUP (Jenkins safe) ---------- */
+            try {
+                if (browser.get() != null) browser.get().close();
+            } catch (Exception ignored) {}
+
+            try {
+                if (playwright.get() != null) playwright.get().close();
+            } catch (Exception ignored) {}
+
+            browser.remove();
+            playwright.remove();
+            context.remove();
+            page.remove();
+            test.remove();
         }
-
-        // Cleanup ThreadLocal
-        tlBrowser.get().close();
-        tlPlaywright.get().close();
-
-        tlPage.remove();
-        tlContext.remove();
-        tlBrowser.remove();
-        tlPlaywright.remove();
-        tlTest.remove();
     }
+
+    /* ================= SUITE TEARDOWN ================= */
 
     @AfterSuite(alwaysRun = true)
     public void flushReport() {
-        extent.flush();
+        if (extent != null) {
+            extent.flush();
+        }
     }
 }
-
