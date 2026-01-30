@@ -59,13 +59,31 @@ public class ExcelUtil {
     }
 
     private static String getCellValue(Cell cell) {
-        if (cell == null) return "";
 
-        return switch (cell.getCellType()) {
-            case STRING -> cell.getStringCellValue();
-            case NUMERIC -> String.valueOf((int) cell.getNumericCellValue());
-            case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
-            default -> "";
-        };
+        if (cell == null) {
+            return "";
+        }
+
+        switch (cell.getCellType()) {
+
+            case STRING:
+                return cell.getStringCellValue();
+
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getDateCellValue().toString();
+                }
+                return String.valueOf(cell.getNumericCellValue());
+
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+
+            case FORMULA:
+                return cell.getCellFormula();
+
+            default:
+                return "";
+        }
     }
+
 }
