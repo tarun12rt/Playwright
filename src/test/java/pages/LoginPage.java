@@ -22,6 +22,8 @@ public class LoginPage extends BasePage {
     private final Locator onlineLinksPolicy;
     private final Locator headerProfileIcon;
     private final Locator loginErrorMessage;
+    private final Locator loggedInProfileIcon;
+
 
     public LoginPage(Page page) {
         super(page);
@@ -44,6 +46,7 @@ public class LoginPage extends BasePage {
 
         headerProfileIcon = page.locator("(//nav[@id='profile-menu-nav']//a)[1]");
         loginErrorMessage=page.getByText("Invalid email or password");
+        loggedInProfileIcon=page.locator("#user-avatar:visible");
     }
 
     // --- Actions ---
@@ -91,5 +94,11 @@ public class LoginPage extends BasePage {
     public boolean verifyErrorsMessage(String errorMessage) {
         String actualText = getText(loginErrorMessage);
         return actualText.equals(errorMessage);
+    }
+
+    public boolean verifyLoggedInProfileIcon() {
+       boolean element = safeIsVisible(loggedInProfileIcon);
+       return element;
+
     }
 }
