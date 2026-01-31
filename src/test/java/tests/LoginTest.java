@@ -15,32 +15,40 @@ public class LoginTest extends BaseTestParallelExecution {
         return loginPage;
     }
 
-    @Test(groups = "login")
+    @Test
     public void verifyLoginPageUI() {
         LoginPage loginPage = getLoginPage();
         Assert.assertTrue(loginPage.isLoginFormVisible());
     }
 
-    @Test(groups = "login")
+    @Test
     public void verifySocialLoginButtonsAreVisible() {
         LoginPage loginPage = getLoginPage();
         Assert.assertTrue(loginPage.areSocialLoginButtonsVisible());
     }
 
-    @Test(groups = "login")
+    @Test
     public void verifyFooterLinksAreVisibleOnLoginPage() {
         LoginPage loginPage = getLoginPage();
         Assert.assertTrue(loginPage.areFooterLinksVisible());
     }
 
-    @Test(groups = "login")
+    @Test
     public void verifyLoginWithInvalidCredentialsShowsError() {
         LoginPage loginPage = getLoginPage();
-        loginPage.enterEmail("invalid@email.com");
+        loginPage.enterEmail("inssaxqvalid@gmail.com");
         loginPage.enterPassword("wrongPassword");
         loginPage.clickSignIn();
-        Assert.assertTrue(
-                loginPage.verifyErrorsMessage("Invalid email or password")
-        );
+        Assert.assertTrue(loginPage.verifyErrorsMessage("Invalid email or password"));
+    }
+
+    @Test
+    public void verifyLoginWithValidCredentials() {
+        LoginPage loginPage = getLoginPage();
+        loginPage.enterEmail("spd@gmail.com");
+        loginPage.enterPassword("testautomation");
+        loginPage.clickSignIn();
+        Assert.assertTrue(loginPage.verifyLoggedInProfileIcon());
+
     }
 }
