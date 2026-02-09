@@ -98,6 +98,18 @@ public class HomePageTest extends BaseTestParallelExecution {
         Assert.assertTrue(homePage.hasAtLeastOneItem("Recommended For You"));
     }
 
+    @Test
+    public void verifyRecommendedCarouselRightButton() {
+        HomePage homePage = getHomePage();
+        Assert.assertTrue(homePage.verifyRecommendedCarouselNext());
+    }
+
+    @Test
+    public void verifyRecommendedCarouselLeftButton() {
+        HomePage homePage = getHomePage();
+        Assert.assertTrue(homePage.verifyRecommendedCarouselPrevious());
+    }
+
     /* ================= MOST POPULAR ================= */
 
     @Test

@@ -28,6 +28,13 @@ public class HomePage extends BasePage {
     /* ===== Article Page ===== */
     private final Locator articleBody;
 
+    /* ===== Recommended For You ===== */
+    private final Locator recommendedSection;
+    private final Locator recommendedCards;
+    private final Locator carouselNextButton;
+    private final Locator carouselPrevButton;
+
+
     public HomePage(Page page) {
         super(page);
 
@@ -45,6 +52,14 @@ public class HomePage extends BasePage {
 
         /* Article */
         articleBody = page.locator("article");
+
+        /* Recommended For You */
+        recommendedSection = page.locator("(//h2[normalize-space()='Recommended For You'])[1]/parent::section");
+        recommendedCards = recommendedSection.locator("//h5/a[@tabindex='0']");
+
+        carouselNextButton = recommendedSection.locator("//button[@aria-label=\"Next\"] ");
+        carouselPrevButton = recommendedSection.locator("//button[@aria-label=\"Previous\"]");
+
     }
 
     // --- Actions ---
@@ -131,5 +146,37 @@ public class HomePage extends BasePage {
     public boolean isNavigatedAwayFromHome() {
         return !page.url().equals(Config.get("baseUrl"));
     }
+
+    public boolean verifyRecommendedCarouselNext() {
+        scrollTo(recommendedSection);
+        String before = getFirstRecommendedCardTitle();
+
+        safeClick(carouselNextButton);
+        page.waitForTimeout(5000); // small wait for slide
+
+        String after = getFirstRecommendedCardTitle();
+        return !before.equals(after);
+    }
+
+    public boolean verifyRecommendedCarouselPrevious() {
+        // Move once forward first
+        scrollTo(recommendedSection);
+        safeClick(carouselNextButton);
+        page.waitForTimeout(500);
+
+        String before = getFirstRecommendedCardTitle();
+
+        safeClick(carouselPrevButton);
+        page.waitForTimeout(5000);
+
+        String after = getFirstRecommendedCardTitle();
+        return !before.equals(after);
+    }
+
+    private String getFirstRecommendedCardTitle() {
+        return recommendedCards.first().innerText().trim();
+    }
+
+
 
 }
