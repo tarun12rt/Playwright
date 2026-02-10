@@ -47,7 +47,7 @@ public class HomePage extends BasePage {
         /* Latest */
         latestSection = page.locator("//h2[normalize-space()='Latest']");
         latestArticles = page.locator("//h2[normalize-space()='Latest']/parent::section//img");
-        latestArticleImages = page.locator("section:has-text('Latest') img");
+        latestArticleImages = page.locator("//h2[normalize-space()='Latest']/parent::section//img");
         latestArticleTitles = page.locator("section:has-text('Latest') h3, section:has-text('Latest') h2");
 
         /* Article */
@@ -177,6 +177,98 @@ public class HomePage extends BasePage {
         return recommendedCards.first().innerText().trim();
     }
 
+    public boolean recommendedItemsHaveCategory() {
+        scrollTo(recommendedSection);
+        Locator categories = page.locator(
+                "//h2[normalize-space()='Recommended For You']/parent::section//p//a"
+        );
+
+        for (Locator category : categories.all()) {
+            String text = category.textContent();
+            if (text == null || text.trim().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isRecommendedItemClickable() {
+        scrollTo(recommendedSection);
+        Locator links = page.locator("//h2[normalize-space()='Recommended For You']/parent::section//h5/a[@tabindex=\"0\"]");
+        return links.count() > 0
+                && links.first().isVisible()
+                && links.first().isEnabled();
+    }
+
+    public boolean recommendedItemsHaveImage() {
+        scrollTo(recommendedSection);
+        Locator images = page.locator("//h2[normalize-space()='Recommended For You']/parent::section//a[@tabindex=\"0\"]/img");
+        for (Locator img : images.all()) {
+            if (!(Boolean) img.evaluate("i => i.complete && i.naturalWidth > 0")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean recommendedItemsHaveTitle() {
+        Locator titles = page.locator(
+                "//h2[normalize-space()='Recommended For You']/parent::section//h3"
+        );
+
+        for (Locator title : titles.all()) {
+            String text = title.textContent();
+            if (text == null || text.trim().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+
+
+    public boolean allLatestArticlesAreClickable() {
+        Locator links = page.locator("//h2[normalize-space()='Latest']/parent::section//h3//a");
+
+        for (Locator link : links.all()) {
+            if (!link.isVisible() || !link.isEnabled()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    public boolean allLatestArticleImagesAreLoaded() {
+        for (Locator img : latestArticleImages.all()) {
+            Boolean loaded = (Boolean) img.evaluate(
+                    "i => i.complete && i.naturalWidth > 0"
+            );
+
+            if (!loaded) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+    public boolean allLatestArticlesHaveCategory() {
+        Locator categories = page.locator(
+                "//h2[normalize-space()='Latest']/parent::section//p//a"
+        );
+
+        for (Locator category : categories.all()) {
+            String text = category.textContent();
+            if (text == null || text.trim().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 
 }

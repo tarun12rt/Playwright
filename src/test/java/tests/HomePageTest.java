@@ -23,6 +23,13 @@ public class HomePageTest extends BaseTestParallelExecution {
     /* ================= READ THIS SECTION ================= */
 
     @Test
+    public void verifyReadThisSection() {
+        HomePage homePage = getHomePage();
+        Assert.assertTrue(homePage.isSectionVisible("Read This"));
+        Assert.assertTrue(homePage.hasAtLeastOneItem("Read This"));
+    }
+
+    @Test
     public void verifyReadThisSectionIsVisible() {
         HomePage homePage = getHomePage();
         Assert.assertTrue(homePage.isReadThisSectionVisible());
@@ -44,6 +51,13 @@ public class HomePageTest extends BaseTestParallelExecution {
     }
 
     /* ================= LATEST SECTION ================= */
+
+    @Test
+    public void verifyLatestSection() {
+        HomePage homePage = getHomePage();
+        Assert.assertTrue(homePage.isSectionVisible("Latest"));
+        Assert.assertTrue(homePage.hasAtLeastOneItem("Latest"));
+    }
 
     @Test
     public void verifyLatestSectionIsVisible() {
@@ -71,23 +85,24 @@ public class HomePageTest extends BaseTestParallelExecution {
         Assert.assertTrue(homePage.isArticlePageOpened());
     }
 
-    /* ================= READ THIS ================= */
-
     @Test
-    public void verifyReadThisSection() {
+    public void verifyLatestArticlesTitlesAreClickable() {
         HomePage homePage = getHomePage();
-        Assert.assertTrue(homePage.isSectionVisible("Read This"));
-        Assert.assertTrue(homePage.hasAtLeastOneItem("Read This"));
+        Assert.assertTrue(homePage.allLatestArticlesAreClickable());
     }
 
-    /* ================= LATEST ================= */
+    @Test
+    public void verifyLatestArticlesImagesAreLoaded() {
+        HomePage homePage = getHomePage();
+        Assert.assertTrue(homePage.allLatestArticleImagesAreLoaded());
+    }
 
     @Test
-    public void verifyLatestSection() {
+    public void verifyLatestArticlesHaveCategoryLabel() {
         HomePage homePage = getHomePage();
-        Assert.assertTrue(homePage.isSectionVisible("Latest"));
-        Assert.assertTrue(homePage.hasAtLeastOneItem("Latest"));
+        Assert.assertTrue(homePage.allLatestArticlesHaveCategory());
     }
+
 
     /* ================= RECOMMENDED FOR YOU ================= */
 
@@ -109,6 +124,28 @@ public class HomePageTest extends BaseTestParallelExecution {
         HomePage homePage = getHomePage();
         Assert.assertTrue(homePage.verifyRecommendedCarouselPrevious());
     }
+
+    @Test
+    public void verifyRecommendedItemsHaveCategory() {
+        HomePage homePage = getHomePage();
+        Assert.assertTrue(homePage.recommendedItemsHaveCategory());
+    }
+
+    @Test
+    public void verifyRecommendedItemNavigation() {
+        HomePage homePage = getHomePage();
+        Assert.assertTrue(homePage.isRecommendedItemClickable());
+    }
+
+    @Test
+    public void verifyRecommendedItemsHaveImageAndTitle() {
+        HomePage homePage = getHomePage();
+        Assert.assertTrue(homePage.recommendedItemsHaveImage());
+        Assert.assertTrue(homePage.recommendedItemsHaveTitle());
+    }
+
+
+
 
     /* ================= MOST POPULAR ================= */
 
