@@ -131,8 +131,7 @@ public class HomePage extends BasePage {
 
 
     public boolean hasAtLeastOneItem(String sectionName) {
-        Locator sectionArticles =
-                page.locator("section:has-text('" + sectionName + "') article");
+        Locator sectionArticles = page.locator("section:has-text('" + sectionName + "') article");
         scrollTo(sectionArticles.first());
         return sectionArticles.count() > 0;
     }
