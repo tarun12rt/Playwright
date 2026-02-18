@@ -5,8 +5,6 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import config.Config;
 
-import java.util.List;
-
 public class HomePage extends BasePage {
 
     // --- Locators ---
@@ -33,6 +31,12 @@ public class HomePage extends BasePage {
     private final Locator recommendedCards;
     private final Locator carouselNextButton;
     private final Locator carouselPrevButton;
+    /* ===== Newsletter ===== */
+    private final Locator newsletterSection;
+    private final Locator newsletterEmailInput;
+    private final Locator newsletterSubscribeButton;
+    private final Locator newsletterErrorMessage;
+
 
 
     public HomePage(Page page) {
@@ -59,6 +63,11 @@ public class HomePage extends BasePage {
 
         carouselNextButton = recommendedSection.locator("//button[@aria-label=\"Next\"] ");
         carouselPrevButton = recommendedSection.locator("//button[@aria-label=\"Previous\"]");
+        /* Newsletter */
+        newsletterSection = page.locator("(//section[contains(@class,'subscription')])[1]");
+        newsletterEmailInput = newsletterSection.locator("//form");
+        newsletterSubscribeButton = newsletterSection.locator("//input[@type='submit']");
+        newsletterErrorMessage = page.getByText("Invalid email address.");
 
     }
 
@@ -121,10 +130,7 @@ public class HomePage extends BasePage {
     /* ===== Generic Section Handling ===== */
 
     public boolean isSectionVisible(String sectionName) {
-        Locator sectionHeader = page.locator("h2", new Page.LocatorOptions()
-                                            .setHasText(sectionName))
-                                    .first();
-
+        Locator sectionHeader = page.locator("h2", new Page.LocatorOptions().setHasText(sectionName)).first();
         scrollTo(sectionHeader);
         return safeIsVisible(sectionHeader);
     }
@@ -269,5 +275,22 @@ public class HomePage extends BasePage {
         return true;
     }
 
+    public boolean isNewsletterSectionVisible() {
+        scrollTo(newsletterSection);
+        return safeIsVisible(newsletterSection)
+                && safeIsVisible(newsletterEmailInput)
+                && safeIsVisible(newsletterSubscribeButton);
+    }
+
+    public boolean isErrorShownForEmptyEmail() {
+
+        scrollTo(newsletterSection);
+
+        // Click subscribe without entering email
+        safeClick(newsletterSubscribeButton);
+
+        // Check error message appears
+        return safeIsVisible(newsletterErrorMessage);
+    }
 
 }
