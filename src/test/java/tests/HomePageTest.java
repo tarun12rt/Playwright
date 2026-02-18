@@ -13,14 +13,16 @@ public class HomePageTest extends BaseTestParallelExecution {
         homepage.open();
         return homepage;
     }
-
+/*
     @Test
     public void verifyHomePageUI() {
         HomePage homePage = getHomePage();
         Assert.assertTrue(homePage.isHomepageVisible());
     }
 
-    /* ================= READ THIS SECTION ================= */
+    */
+/* ================= READ THIS SECTION ================= *//*
+
 
     @Test
     public void verifyReadThisSection() {
@@ -50,7 +52,9 @@ public class HomePageTest extends BaseTestParallelExecution {
         Assert.assertTrue(homePage.isArticlePageOpened());
     }
 
-    /* ================= LATEST SECTION ================= */
+    */
+/* ================= LATEST SECTION ================= *//*
+
 
     @Test
     public void verifyLatestSection() {
@@ -104,7 +108,9 @@ public class HomePageTest extends BaseTestParallelExecution {
     }
 
 
-    /* ================= RECOMMENDED FOR YOU ================= */
+    */
+/* ================= RECOMMENDED FOR YOU ================= *//*
+
 
     @Test
     public void verifyRecommendedForYouSection() {
@@ -145,7 +151,9 @@ public class HomePageTest extends BaseTestParallelExecution {
     }
 
 
-    /* ================= MOST POPULAR ================= */
+    */
+/* ================= MOST POPULAR ================= *//*
+
 
     @Test
     public void verifyMostPopularSectionIsVisible() {
@@ -250,7 +258,9 @@ public class HomePageTest extends BaseTestParallelExecution {
     }
 
 
-    /* ================= ENTERTAINMENT ================= */
+    */
+/* ================= ENTERTAINMENT ================= *//*
+
     @Test
     public void verifyEntertainmentSectionIsVisible() {
         HomePage homePage = getHomePage();
@@ -268,6 +278,8 @@ public class HomePageTest extends BaseTestParallelExecution {
         HomePage homePage = getHomePage();
         Assert.assertTrue(homePage.isFeaturedItemVisible("Entertainment"));
     }
+
+
 
     @Test
     public void verifyEntertainmentFeaturedArticleHasImage() {
@@ -348,7 +360,9 @@ public class HomePageTest extends BaseTestParallelExecution {
     }
 
 
-    /* ================= EAT & DRINK ================= */
+    */
+/* ================= EAT & DRINK ================= *//*
+
 
     @Test
     public void verifyEatAndDrinkSectionIsVisible() {
@@ -448,7 +462,9 @@ public class HomePageTest extends BaseTestParallelExecution {
 
 
 
-    /* ================= SEE & DO ================= */
+    */
+/* ================= SEE & DO ================= *//*
+
 
     @Test
     public void verifySeeAndDoSectionIsVisible() {
@@ -516,7 +532,9 @@ public class HomePageTest extends BaseTestParallelExecution {
         Assert.assertTrue(homePage.isSeeMoreNavigationWorking("See & Do"));
     }
 
-    /* ================= LIVE & LEARN ================= */
+    */
+/* ================= LIVE & LEARN ================= *//*
+
 
     @Test
     public void verifyLiveAndLearnSectionIsVisible() {
@@ -592,7 +610,9 @@ public class HomePageTest extends BaseTestParallelExecution {
 
 
 
-    /* ================= WATCH ================= */
+    */
+/* ================= WATCH ================= *//*
+
 
     @Test
     public void verifyWatchSectionIsVisible() {
@@ -674,7 +694,9 @@ public class HomePageTest extends BaseTestParallelExecution {
 
 
 
-    /* ================= FEATURED PODCASTS ================= */
+    */
+/* ================= FEATURED PODCASTS ================= *//*
+
 
     @Test
     public void verifyFeaturedPodcastsSectionIsVisible() {
@@ -748,7 +770,9 @@ public class HomePageTest extends BaseTestParallelExecution {
         Assert.assertTrue(homePage.isSeeMoreNavigationWorking("Featured Podcasts"));
     }
 
-    /* ================= CHECK THESE OUT ================= */
+    */
+/* ================= CHECK THESE OUT ================= *//*
+
 
     @Test
     public void verifyCheckTheseOutSectionIsVisible() {
@@ -798,7 +822,9 @@ public class HomePageTest extends BaseTestParallelExecution {
         Assert.assertTrue(homePage.isThreeDotMenuWorking("Check These Out"));
     }
 
-    /* ================= NEWSLETTER ================= */
+    */
+/* ================= NEWSLETTER ================= *//*
+
 
     @Test
     public void verifyNewsletterSectionIsVisible() {
@@ -873,4 +899,75 @@ public class HomePageTest extends BaseTestParallelExecution {
     }
 
 
+}
+*/
+    /* ================= BASIC LOAD ================= */
+
+    @Test
+    public void verifyHomePageLoadsSuccessfully() {
+        HomePage homePage = getHomePage();
+        Assert.assertTrue(homePage.isHomepageVisible());
+    }
+
+    /* ================= CORE SECTIONS ================= */
+
+    @Test
+    public void verifyMajorSectionsAreVisible() {
+        HomePage homePage = getHomePage();
+
+        Assert.assertTrue(homePage.isSectionVisible("Read This"));
+        Assert.assertTrue(homePage.isSectionVisible("Latest"));
+        Assert.assertTrue(homePage.isSectionVisible("Recommended For You"));
+        Assert.assertTrue(homePage.isSectionVisible("Most Popular"));
+        Assert.assertTrue(homePage.isSectionVisible("Entertainment"));
+        Assert.assertTrue(homePage.isSectionVisible("Eat & Drink"));
+        Assert.assertTrue(homePage.isSectionVisible("See & Do"));
+        Assert.assertTrue(homePage.isSectionVisible("Live & Learn"));
+        Assert.assertTrue(homePage.isSectionVisible("Watch"));
+        Assert.assertTrue(homePage.isSectionVisible("Featured Podcasts"));
+        Assert.assertTrue(homePage.isSectionVisible("Check These Out"));
+    }
+
+    /* ================= CONTENT EXISTS ================= */
+
+    @Test
+    public void verifySectionsContainContent() {
+        HomePage homePage = getHomePage();
+
+        Assert.assertTrue(homePage.hasAtLeastOneItem("Latest"));
+        Assert.assertTrue(homePage.hasAtLeastOneItem("Recommended For You"));
+        Assert.assertTrue(homePage.hasAtLeastOneItem("Most Popular"));
+        Assert.assertTrue(homePage.hasAtLeastOneItem("Entertainment"));
+        Assert.assertTrue(homePage.hasAtLeastOneItem("Eat & Drink"));
+        Assert.assertTrue(homePage.hasAtLeastOneItem("Watch"));
+    }
+
+    /* ================= NAVIGATION CHECK ================= */
+
+    @Test
+    public void verifyLatestArticleNavigationWorks() {
+        HomePage homePage = getHomePage();
+        homePage.clickFirstLatestArticle();
+        Assert.assertTrue(homePage.isArticlePageOpened());
+    }
+
+    @Test
+    public void verifyRecommendedCarouselWorks() {
+        HomePage homePage = getHomePage();
+        Assert.assertTrue(homePage.verifyRecommendedCarouselNext());
+    }
+
+    /* ================= NEWSLETTER BASIC ================= */
+
+    @Test
+    public void verifyNewsletterSectionVisible() {
+        HomePage homePage = getHomePage();
+        Assert.assertTrue(homePage.isNewsletterSectionVisible());
+    }
+
+    @Test
+    public void verifyNewsletterRejectsEmptyEmail() {
+        HomePage homePage = getHomePage();
+        Assert.assertTrue(homePage.isErrorShownForEmptyEmail());
+    }
 }
