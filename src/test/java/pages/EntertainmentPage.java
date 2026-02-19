@@ -28,31 +28,34 @@ public class EntertainmentPage extends BasePage {
     /* ===== Article Page ===== */
     private final Locator articleBody;
 
+    private final Locator entertainmentMenu;
+
 
     public EntertainmentPage(Page page) {
         super(page);
 
         /* Page Heading */
-        entertainmentHeading = page.locator("h1:has-text('Entertainment')");
+        entertainmentHeading = page.locator("//span[normalize-space()='Entertainment']");
 
         /* Hero Section */
-        heroSection = page.locator("section").filter(new Locator.FilterOptions()
-                .setHas(page.locator("text=Star Awards")));
-        heroTitle = heroSection.locator("h2, h3").first();
-        heroReadNowButton = heroSection.locator("text=Read Now");
+        heroSection = page.locator("//section[@data-title=\"Dynamic Listing 1\"]");
+        heroTitle = heroSection.locator("//h2/a");
+        heroReadNowButton = heroSection.locator("//a[normalize-space()='Read now']");
 
         /* Latest */
-        latestSection = page.locator("h2:has-text('Latest')");
-        latestArticles = page.locator("section:has-text('Latest') article");
+        latestSection = page.locator("//section[@data-title=\"Latest\"]");
+        latestArticles = page.locator("//section[@data-title=\"Latest\"]//div//img");
         latestFirstArticle = latestArticles.first();
 
         /* Popular */
-        popularSection = page.locator("h2:has-text('Popular')");
-        popularArticles = page.locator("section:has-text('Popular') article");
-        loadMoreButton = page.locator("text=Load More");
+        popularSection = page.locator("//section[@data-title=\"Popular\"]");
+        popularArticles = page.locator("//section[@data-title=\"Popular\"]//div//img");
+        loadMoreButton = page.getByText("LOAD MORE");
 
         /* Article Page */
-        articleBody = page.locator("article");
+        articleBody = page.locator("//a[@class='breadcrumb__link'][normalize-space()='Entertainment']");
+
+        entertainmentMenu = page.locator("//a[normalize-space()='Entertainment']");
     }
 
     /* ================= ACTIONS ================= */
@@ -125,5 +128,9 @@ public class EntertainmentPage extends BasePage {
     }
 
     public void clickHeroReadNow() {
+    }
+
+    public void clickEntertainmentMenu() {
+        safeClick(entertainmentMenu);
     }
 }

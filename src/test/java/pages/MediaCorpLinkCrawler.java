@@ -191,6 +191,6 @@ public class MediaCorpLinkCrawler {
     // ===================== MAIN =====================
     public static void main(String[] args) {
         new MediaCorpLinkCrawler()
-                .start("https://www.8days.sg/");
+                .start("https://www.8days.sg");
     }
 }
