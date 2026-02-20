@@ -2,6 +2,7 @@ package pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.WaitForSelectorState;
 
 public class EntertainmentPage extends BasePage {
 
@@ -35,7 +36,7 @@ public class EntertainmentPage extends BasePage {
         super(page);
 
         /* Page Heading */
-        entertainmentHeading = page.locator("//span[normalize-space()='Entertainment']");
+        entertainmentHeading = page.locator("//h1[@data-title='Title']/span");
 
         /* Hero Section */
         heroSection = page.locator("//section[@data-title=\"Dynamic Listing 1\"]");
@@ -55,7 +56,7 @@ public class EntertainmentPage extends BasePage {
         /* Article Page */
         articleBody = page.locator("//a[@class='breadcrumb__link'][normalize-space()='Entertainment']");
 
-        entertainmentMenu = page.locator("//a[normalize-space()='Entertainment']");
+        entertainmentMenu = page.locator("//nav[@id='main-nav']//a[@href=\"/entertainment\"]");
     }
 
     /* ================= ACTIONS ================= */

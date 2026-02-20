@@ -5,7 +5,7 @@ import java.util.Properties;
 
 public class Config {
 
-    private static Properties prop = new Properties();
+    private static final Properties prop = new Properties();
 
     static {
         try (InputStream is =
@@ -29,5 +29,20 @@ public class Config {
 
     public static boolean getBoolean(String key) {
         return Boolean.parseBoolean(prop.getProperty(key));
+    }
+
+    // ✅ NEW METHOD (For globalWait)
+    public static int getInt(String key) {
+        String value = prop.getProperty(key);
+        if (value == null) {
+            throw new RuntimeException("Key not found in config.properties: " + key);
+        }
+        return Integer.parseInt(value.trim());
+    }
+
+    // ✅ OPTIONAL (Recommended) - Default Value Support
+    public static int getInt(String key, int defaultValue) {
+        String value = prop.getProperty(key);
+        return (value != null) ? Integer.parseInt(value.trim()) : defaultValue;
     }
 }

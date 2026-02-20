@@ -9,10 +9,15 @@ import config.Config;
 public class BasePage {
 
     protected Page page;
-    private static final int DEFAULT_TIMEOUT = 5000;
+    protected final int GLOBAL_TIMEOUT;
 
     public BasePage(Page page) {
         this.page = page;
+        this.GLOBAL_TIMEOUT = Config.getInt("globalWait", 10000);
+
+        // Apply globally to Playwright (BEST PRACTICE)
+        page.setDefaultTimeout(GLOBAL_TIMEOUT);
+        page.setDefaultNavigationTimeout(GLOBAL_TIMEOUT);
     }
 
     /* ================= WAIT UTILITIES ================= */
@@ -21,7 +26,7 @@ public class BasePage {
         locator.waitFor(
                 new Locator.WaitForOptions()
                         .setState(WaitForSelectorState.VISIBLE)
-                        .setTimeout(DEFAULT_TIMEOUT)
+                        .setTimeout(GLOBAL_TIMEOUT)
         );
     }
 
@@ -29,7 +34,7 @@ public class BasePage {
         locator.waitFor(
                 new Locator.WaitForOptions()
                         .setState(WaitForSelectorState.HIDDEN)
-                        .setTimeout(DEFAULT_TIMEOUT)
+                        .setTimeout(GLOBAL_TIMEOUT)
         );
     }
 
@@ -40,8 +45,7 @@ public class BasePage {
     /* ================= SAFE ACTIONS ================= */
 
     protected void safeClick(Locator locator) {
-        waitForVisible(locator);
-        locator.click();
+        locator.click();  // Playwright auto-waits
     }
 
     protected void clickIfVisible(Locator locator) {
@@ -51,19 +55,16 @@ public class BasePage {
     }
 
     protected void safeFill(Locator locator, String text) {
-        waitForVisible(locator);
-        locator.fill(text);
+        locator.fill(text);  // auto-wait
     }
 
     protected void clearAndFill(Locator locator, String text) {
-        waitForVisible(locator);
-        locator.clear();
+        locator.fill("");   // better than clear()
         locator.fill(text);
     }
 
     protected boolean safeIsVisible(Locator locator) {
         try {
-            waitForVisible(locator);
             return locator.isVisible();
         } catch (Exception e) {
             return false;
@@ -73,7 +74,6 @@ public class BasePage {
     /* ================= TEXT UTILITIES ================= */
 
     protected String getText(Locator locator) {
-        waitForVisible(locator);
         return locator.textContent().trim();
     }
 
@@ -118,23 +118,11 @@ public class BasePage {
     protected Page clickAndSwitchToNewPage(Locator locator) {
 
         BrowserContext context = page.context();
-        int pagesBefore = context.pages().size();
 
-        locator.click();
+        Page newPage = context.waitForPage(() -> locator.click());
 
-        // Wait briefly for new tab
-        page.waitForTimeout(500);
-
-        if (context.pages().size() > pagesBefore) {
-            Page newPage = context.pages().get(context.pages().size() - 1);
-            newPage.waitForLoadState();
-            System.out.println("✅ New tab/window opened");
-            return newPage;
-        }
-
-        page.waitForLoadState();
-        System.out.println("ℹ️ Stayed on same page");
-        return page;
+        newPage.waitForLoadState();
+        return newPage;
     }
 
     protected void restoreToOriginalPage(Page navigatedPage) {
@@ -142,10 +130,8 @@ public class BasePage {
         if (navigatedPage != page) {
             navigatedPage.close();
             page.bringToFront();
-            page.waitForLoadState();
         } else {
             page.goBack();
-            page.waitForLoadState();
         }
     }
 
