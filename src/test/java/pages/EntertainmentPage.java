@@ -36,7 +36,7 @@ public class EntertainmentPage extends BasePage {
         super(page);
 
         /* Page Heading */
-        entertainmentHeading = page.locator("//h1[@data-title='Title']/span");
+        entertainmentHeading = page.locator("//section/h1[@data-title='Title']/span");
 
         /* Hero Section */
         heroSection = page.locator("//section[@data-title=\"Dynamic Listing 1\"]");
@@ -63,44 +63,45 @@ public class EntertainmentPage extends BasePage {
 
     public void open() {
         openBaseUrl();
+        clickAndWaitForPageLoad(entertainmentMenu);
     }
 
     public void clickFirstLatestArticle() {
-        scrollTo(latestFirstArticle);
-        safeClick(latestFirstArticle);
+        latestFirstArticle.scrollIntoViewIfNeeded();
+        clickAndWaitForPageLoad(latestFirstArticle);
     }
 
     public void clickLoadMore() {
-        scrollTo(loadMoreButton);
-        safeClick(loadMoreButton);
+        loadMoreButton.scrollIntoViewIfNeeded();
+        clickAndWaitForPageLoad(loadMoreButton);
     }
 
     /* ================= VERIFICATIONS ================= */
 
     public boolean isEntertainmentPageVisible() {
-        return safeIsVisible(entertainmentHeading);
+        return waitUntilVisible(entertainmentHeading);
     }
 
     /* ===== Hero ===== */
 
     public boolean isHeroSectionVisible() {
-        scrollTo(heroSection);
-        return safeIsVisible(heroSection);
+        heroSection.scrollIntoViewIfNeeded();
+        return waitUntilVisible(heroSection);
     }
 
     public boolean isHeroTitleVisible() {
-        return safeIsVisible(heroTitle);
+        return waitUntilVisible(heroTitle);
     }
 
     public boolean isHeroReadNowButtonVisible() {
-        return safeIsVisible(heroReadNowButton);
+        return waitUntilVisible(heroReadNowButton);
     }
 
     /* ===== Latest ===== */
 
     public boolean isLatestSectionVisible() {
-        scrollTo(latestSection);
-        return safeIsVisible(latestSection);
+        latestSection.scrollIntoViewIfNeeded();
+        return waitUntilVisible(latestSection);
     }
 
     public boolean hasAtLeastOneLatestArticle() {
@@ -110,8 +111,8 @@ public class EntertainmentPage extends BasePage {
     /* ===== Popular ===== */
 
     public boolean isPopularSectionVisible() {
-        scrollTo(popularSection);
-        return safeIsVisible(popularSection);
+        popularSection.scrollIntoViewIfNeeded();
+        return waitUntilVisible(popularSection);
     }
 
     public boolean hasAtLeastOnePopularArticle() {
@@ -125,13 +126,10 @@ public class EntertainmentPage extends BasePage {
     /* ===== Article Navigation ===== */
 
     public boolean isArticlePageOpened() {
-        return safeIsVisible(articleBody);
+        return waitUntilVisible(articleBody);
     }
 
     public void clickHeroReadNow() {
-    }
-
-    public void clickEntertainmentMenu() {
-        safeClick(entertainmentMenu);
+        clickAndWaitForPageLoad(heroReadNowButton);
     }
 }

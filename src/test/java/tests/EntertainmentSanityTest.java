@@ -11,7 +11,6 @@ public class EntertainmentSanityTest extends BaseTestParallelExecution {
         System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
         EntertainmentPage entertainmentPage = new EntertainmentPage(page());
         entertainmentPage.open();
-        entertainmentPage.clickEntertainmentMenu();
         return entertainmentPage;
     }
 
