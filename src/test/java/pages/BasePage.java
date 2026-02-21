@@ -3,6 +3,7 @@ package pages;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import config.Config;
 
@@ -141,5 +142,32 @@ public class BasePage {
 
     protected Page getMainPage() {
         return page;
+    }
+
+    /* ================= COMMON NAVIGATION CLICK ================= */
+
+    protected void clickAndWaitForPageLoad(Locator locator) {
+
+        locator.scrollIntoViewIfNeeded();
+
+        page.waitForNavigation(() -> {
+            locator.click();
+        });
+
+        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
+    }
+
+    /* ================= COMMON VISIBILITY CHECK ================= */
+
+    protected boolean waitUntilVisible(Locator locator) {
+        try {
+            locator.waitFor(
+                    new Locator.WaitForOptions()
+                            .setState(WaitForSelectorState.VISIBLE)
+            );
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
