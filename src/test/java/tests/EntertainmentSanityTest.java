@@ -69,11 +69,9 @@ public class EntertainmentSanityTest extends BaseTestParallelExecution {
     @Test
     public void verifyLoadMoreWorks() {
         EntertainmentPage entertainmentPage = getEntertainmentPage();
-
         int beforeCount = entertainmentPage.getPopularArticleCount();
         entertainmentPage.clickLoadMore();
         int afterCount = entertainmentPage.getPopularArticleCount();
-
         Assert.assertTrue(afterCount > beforeCount);
     }
 }

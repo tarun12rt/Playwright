@@ -51,7 +51,7 @@ public class EntertainmentPage extends BasePage {
         /* Popular */
         popularSection = page.locator("//section[@data-title=\"Popular\"]");
         popularArticles = page.locator("//section[@data-title=\"Popular\"]//div//img");
-        loadMoreButton = page.getByText("LOAD MORE");
+        loadMoreButton = page.locator("//button[normalize-space()='LOAD MORE']");
 
         /* Article Page */
         articleBody = page.locator("//a[@class='breadcrumb__link'][normalize-space()='Entertainment']");
@@ -72,8 +72,8 @@ public class EntertainmentPage extends BasePage {
     }
 
     public void clickLoadMore() {
-        loadMoreButton.scrollIntoViewIfNeeded();
-        clickAndWaitForPageLoad(loadMoreButton);
+        scrollTo(loadMoreButton);
+        safeClick(loadMoreButton);
     }
 
     /* ================= VERIFICATIONS ================= */

@@ -5,7 +5,7 @@
 
     <test name="UI Tests">
         <classes>
-            <class name="tests.EntertainmentSanityTest"/>
+            <class name="tests.LocalEntertainmentSanityTest"/>
 <!--            <class name="tests.FooterTest"/>-->
         </classes>
     </test>
