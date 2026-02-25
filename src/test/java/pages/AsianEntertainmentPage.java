@@ -2,17 +2,18 @@ package pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.WaitForSelectorState;
 
-public class LocalEntertainmentPage extends BasePage {
+public class AsianEntertainmentPage extends BasePage {
 
     /* ================= LOCATORS ================= */
 
     // Navigation
     private final Locator entertainmentMenu;
-    private final Locator localSubMenu;
+    private final Locator asianSubMenu;
 
     // Page Heading
-    private final Locator localHeading;
+    private final Locator asianHeading;
 
     /* ===== Hero Section ===== */
     private final Locator heroSection;
@@ -30,40 +31,47 @@ public class LocalEntertainmentPage extends BasePage {
     /* ===== Article Page ===== */
     private final Locator articleBreadcrumb;
 
-    public LocalEntertainmentPage(Page page) {
+    public AsianEntertainmentPage(Page page) {
         super(page);
 
         /* ===== Navigation ===== */
         entertainmentMenu = page.locator("//nav[@id='main-nav']//a[@href=\"/entertainment\"]");
-        localSubMenu = page.locator("//ul[contains(@class,'sub')]//a[text()='Local']");
+        asianSubMenu = page.locator("//ul[contains(@class,'sub')]//a[text()='Asian']");
 
         /* ===== Page Heading ===== */
-        localHeading = page.locator("//h1[normalize-space()='Local']");
+        asianHeading = page.locator("//h1[normalize-space()='Asian']");
 
         /* ===== Hero Section ===== */
-        heroSection = page.locator("//section[contains(@class,'top_stories')]");
+        heroSection = page.locator("//section[@data-title=\"Dynamic Listing 1\"]");
         heroTitle = heroSection.locator("//h2/a");
         heroReadNowButton = heroSection.locator("//a[contains(text(),'Read')]");
 
         /* ===== Articles Section ===== */
         articleList = page.locator("//div[contains(@class,'scroll-listing')]");
-        articles = articleList.locator("//img");
+        articles = page.locator("//img");
         firstArticle = articles.first();
 
         /* ===== Load More ===== */
         loadMoreButton = articleList.locator("//button[normalize-space()='LOAD MORE']");
 
         /* ===== Article Page ===== */
-        articleBreadcrumb = page.locator("#block-breadcrumbs");
+        articleBreadcrumb = page.locator("//a[contains(@class,'breadcrumb__link') and normalize-space()='Asian']");
     }
 
     /* ================= ACTIONS ================= */
 
     public void open() {
         openBaseUrl();
-        waitUntilVisible(entertainmentMenu);
+
+        // Hover on Entertainment
         entertainmentMenu.hover();
-        clickAndWaitForPageLoad(localSubMenu);
+
+        asianSubMenu.waitFor(
+                new Locator.WaitForOptions()
+                        .setState(WaitForSelectorState.VISIBLE)
+        );
+
+        safeClick(asianSubMenu);
     }
 
     public void clickHeroReadNow() {
@@ -76,15 +84,14 @@ public class LocalEntertainmentPage extends BasePage {
     }
 
     public void clickLoadMore() {
-        waitUntilVisible(loadMoreButton);
         scrollTo(loadMoreButton);
-        clickAndWaitForPageLoad(loadMoreButton);
+        safeClick(loadMoreButton);
     }
 
     /* ================= VERIFICATIONS ================= */
 
-    public boolean isLocalPageTitleVisible() {
-        return waitUntilVisible(localHeading);
+    public boolean isAsianPageVisible() {
+        return waitUntilVisible(asianHeading);
     }
 
     /* ===== Hero ===== */
@@ -104,7 +111,7 @@ public class LocalEntertainmentPage extends BasePage {
 
     /* ===== Articles ===== */
 
-    public boolean isArticleListVisible() {
+    public boolean isArticleSectionVisible() {
         articleList.scrollIntoViewIfNeeded();
         return waitUntilVisible(articleList);
     }
@@ -117,14 +124,14 @@ public class LocalEntertainmentPage extends BasePage {
         return articles.count();
     }
 
+    public boolean isLoadMoreButtonVisible() {
+        loadMoreButton.scrollIntoViewIfNeeded();
+        return waitUntilVisible(loadMoreButton);
+    }
+
     /* ===== Article Navigation ===== */
 
     public boolean isArticlePageOpened() {
         return waitUntilVisible(articleBreadcrumb);
-    }
-
-    public boolean isLoadMoreButtonVisible() {
-        loadMoreButton.scrollIntoViewIfNeeded();
-        return waitUntilVisible(loadMoreButton);
     }
 }
