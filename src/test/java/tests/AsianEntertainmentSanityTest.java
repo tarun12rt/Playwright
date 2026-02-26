@@ -8,52 +8,53 @@ import pages.AsianEntertainmentPage;
 public class AsianEntertainmentSanityTest extends BaseTestParallelExecution {
 
     private AsianEntertainmentPage getAsianPage() {
-        AsianEntertainmentPage page = new AsianEntertainmentPage(page());
-        page.open();
-        return page;
+        System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
+        AsianEntertainmentPage asianEntertainmentPage = new AsianEntertainmentPage(page());
+        asianEntertainmentPage.open();
+        return asianEntertainmentPage;
     }
 
     @Test
     public void verifyAsianPageLoads() {
-        AsianEntertainmentPage page = getAsianPage();
-        Assert.assertTrue(page.isAsianPageVisible());
+        AsianEntertainmentPage asianEntertainmentPage = getAsianPage();
+        Assert.assertTrue(asianEntertainmentPage.isAsianPageVisible());
     }
 
     @Test
     public void verifyHeroSection() {
-        AsianEntertainmentPage page = getAsianPage();
-        Assert.assertTrue(page.isHeroSectionVisible());
-        Assert.assertTrue(page.isHeroTitleVisible());
-        Assert.assertTrue(page.isHeroReadNowButtonVisible());
+        AsianEntertainmentPage asianEntertainmentPage = getAsianPage();
+        Assert.assertTrue(asianEntertainmentPage.isHeroSectionVisible());
+        Assert.assertTrue(asianEntertainmentPage.isHeroTitleVisible());
+        Assert.assertTrue(asianEntertainmentPage.isHeroReadNowButtonVisible());
     }
 
     @Test
     public void verifyHeroNavigation() {
-        AsianEntertainmentPage page = getAsianPage();
-        page.clickHeroReadNow();
-        Assert.assertTrue(page.isArticlePageOpened());
+        AsianEntertainmentPage asianEntertainmentPage = getAsianPage();
+        asianEntertainmentPage.clickHeroReadNow();
+        Assert.assertTrue(asianEntertainmentPage.isArticlePageOpened());
     }
 
     @Test
     public void verifyArticleSection() {
-        AsianEntertainmentPage page = getAsianPage();
-        Assert.assertTrue(page.isArticleSectionVisible());
-        Assert.assertTrue(page.hasAtLeastOneArticle());
+        AsianEntertainmentPage asianEntertainmentPage = getAsianPage();
+        Assert.assertTrue(asianEntertainmentPage.isArticleSectionVisible());
+        Assert.assertTrue(asianEntertainmentPage.hasAtLeastOneArticle());
     }
 
     @Test
     public void verifyArticleNavigation() {
-        AsianEntertainmentPage page = getAsianPage();
-        page.clickFirstArticle();
-        Assert.assertTrue(page.isArticlePageOpened());
+        AsianEntertainmentPage asianEntertainmentPage = getAsianPage();
+        asianEntertainmentPage.clickFirstArticle();
+        Assert.assertTrue(asianEntertainmentPage.isArticlePageOpened());
     }
 
     @Test
     public void verifyLoadMoreWorks() {
-        AsianEntertainmentPage page = getAsianPage();
-        int before = page.getArticleCount();
-        page.clickLoadMore();
-        int after = page.getArticleCount();
+        AsianEntertainmentPage asianEntertainmentPage = getAsianPage();
+        int before = asianEntertainmentPage.getArticleCount();
+        asianEntertainmentPage.clickLoadMore();
+        int after = asianEntertainmentPage.getArticleCount();
         Assert.assertTrue(after > before);
     }
 }
