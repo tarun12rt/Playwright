@@ -96,6 +96,8 @@ public class BasePage {
 
     protected void openBaseUrl() {
         page.navigate(Config.get("baseUrl"));
+
+        handleAdPopUp();
     }
 
     protected String getPageTitle() {
@@ -168,6 +170,17 @@ public class BasePage {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public void handleAdPopUp() {
+        Locator locator = page.locator("//div[@class=\"splashLabel\"]//button[text()='Close Ad X']");
+       /* locator.waitFor(
+                new Locator.WaitForOptions()
+                        .setState(WaitForSelectorState.VISIBLE)
+        );*/
+        if (locator.isVisible()) {
+            safeClick(locator);
         }
     }
 }
