@@ -1,6 +1,7 @@
 package pages;
 
 import com.microsoft.playwright.BrowserContext;
+import com.microsoft.playwright.FrameLocator;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
@@ -172,15 +173,20 @@ public class BasePage {
             return false;
         }
     }
-
     public void handleAdPopUp() {
-        Locator locator = page.locator("//div[@class=\"splashLabel\"]//button[text()='Close Ad X']");
-       /* locator.waitFor(
-                new Locator.WaitForOptions()
-                        .setState(WaitForSelectorState.VISIBLE)
-        );*/
-        if (locator.isVisible()) {
-            safeClick(locator);
+        try {
+            FrameLocator adFrame = page.frameLocator(
+                    "iframe[title='3rd party ad content'][width='1']"
+            );
+
+            Locator closeButton = adFrame.locator("button:has-text('Close Ad')");
+
+            if (closeButton.count() > 0) {
+                closeButton.first().click();
+            }
+
+        } catch (Exception e) {
+            System.out.println("Ad popup not present.");
         }
     }
 }
