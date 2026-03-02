@@ -27,7 +27,7 @@ FRAMEWORK ARCHITECTURE
 ----------------------
 
 src/test/java
- ├── base
+ ├── runner
  │   ├── BaseTestSingleExecution.java
  │   └── BaseTestParallelExecution.java   (ThreadLocal based)
  │

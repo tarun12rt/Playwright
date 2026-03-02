@@ -1,6 +1,6 @@
 package tests;
 
-import base.BaseTestSingleExecution;
+import runner.BaseTestSingleExecution;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

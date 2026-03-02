@@ -1,12 +1,12 @@
 package tests;
 
-import base.BaseTestParallelExecution;
+import runner.BaseTestParallelExecution;
 import enums.FooterCategoryLink;
 import enums.FooterLinkNavigation;
 import enums.FooterSocialLink;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.FooterPage;
+import pages.common.FooterPage;
 
 public class FooterTest extends BaseTestParallelExecution {
 

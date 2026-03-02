@@ -1,8 +1,8 @@
-package pages;
+package pages.categories;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.WaitForSelectorState;
+import pages.base.BasePage;
 
 public class EntertainmentPage extends BasePage {
 

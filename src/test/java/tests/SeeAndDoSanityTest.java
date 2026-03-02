@@ -1,9 +1,9 @@
 package tests;
 
-import base.BaseTestParallelExecution;
+import runner.BaseTestParallelExecution;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.SeeAndDoPage;
+import pages.categories.SeeAndDoPage;
 
 public class SeeAndDoSanityTest extends BaseTestParallelExecution {
 

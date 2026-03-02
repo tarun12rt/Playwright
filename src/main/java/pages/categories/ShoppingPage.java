@@ -1,7 +1,8 @@
-package pages;
+package pages.categories;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import pages.base.BasePage;
 
 public class ShoppingPage extends BasePage {
 

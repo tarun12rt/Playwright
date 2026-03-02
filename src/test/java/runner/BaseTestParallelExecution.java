@@ -1,4 +1,4 @@
-package base;
+package runner;
 
 import com.microsoft.playwright.*;
 import com.aventstack.extentreports.*;

@@ -1,10 +1,9 @@
 package tests;
 
-import base.BaseTestParallelExecution;
+import runner.BaseTestParallelExecution;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.HollywoodEntertainmentPage;
-import pages.LocalEntertainmentPage;
+import pages.subcategories.HollywoodEntertainmentPage;
 
 public class HollywoodEntertainmentSanityTest extends BaseTestParallelExecution {
 
