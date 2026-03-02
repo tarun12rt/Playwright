@@ -1,4 +1,4 @@
-package pages;
+package pages.base;
 
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.FrameLocator;

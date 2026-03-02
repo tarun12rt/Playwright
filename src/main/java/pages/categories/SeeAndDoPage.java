@@ -1,14 +1,15 @@
-package pages;
+package pages.categories;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import pages.base.BasePage;
 
-public class LiveAndLearnPage extends BasePage {
+public class SeeAndDoPage extends BasePage {
 
     /* ================= LOCATORS ================= */
 
     // Page Heading
-    private final Locator liveAndLearnHeading;
+    private final Locator seeAndDoHeading;
 
     /* ===== Hero Section ===== */
     private final Locator heroSection;
@@ -28,14 +29,14 @@ public class LiveAndLearnPage extends BasePage {
     /* ===== Article Page ===== */
     private final Locator articleBody;
 
-    private final Locator liveAndLearnMenu;
+    private final Locator seeAndDoMenu;
 
-    public LiveAndLearnPage(Page page) {
+    public SeeAndDoPage(Page page) {
         super(page);
 
         /* Page Heading */
-        liveAndLearnHeading =
-                page.locator("//h1[normalize-space()='Live & Learn']");
+        seeAndDoHeading =
+                page.locator("//h1[normalize-space()='See & Do']");
 
         /* Hero Section */
         heroSection =
@@ -63,18 +64,18 @@ public class LiveAndLearnPage extends BasePage {
 
         /* Article Page (Breadcrumb check) */
         articleBody =
-                page.locator("//a[contains(@class,'breadcrumb__link') and normalize-space()='Live & Learn']");
+                page.locator("//a[contains(@class,'breadcrumb__link') and normalize-space()='See & Do']");
 
         /* Menu */
-        liveAndLearnMenu =
-                page.locator("//nav[@id='main-nav']//a[@href='/liveandlearn']");
+        seeAndDoMenu =
+                page.locator("//nav[@id='main-nav']//a[@href='/seeanddo']");
     }
 
     /* ================= ACTIONS ================= */
 
     public void open() {
         openBaseUrl();
-        clickAndWaitForPageLoad(liveAndLearnMenu);
+        clickAndWaitForPageLoad(seeAndDoMenu);
     }
 
     public void clickHeroReadNow() {
@@ -93,8 +94,8 @@ public class LiveAndLearnPage extends BasePage {
 
     /* ================= VERIFICATIONS ================= */
 
-    public boolean isLiveAndLearnPageVisible() {
-        return waitUntilVisible(liveAndLearnHeading);
+    public boolean isSeeAndDoPageVisible() {
+        return waitUntilVisible(seeAndDoHeading);
     }
 
     /* ===== Hero ===== */

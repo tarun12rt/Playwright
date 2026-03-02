@@ -1,14 +1,15 @@
-package pages;
+package pages.categories;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import pages.base.BasePage;
 
-public class SeeAndDoPage extends BasePage {
+public class EatAndDrinkPage extends BasePage {
 
     /* ================= LOCATORS ================= */
 
     // Page Heading
-    private final Locator seeAndDoHeading;
+    private final Locator eatAndDrinkHeading;
 
     /* ===== Hero Section ===== */
     private final Locator heroSection;
@@ -28,53 +29,41 @@ public class SeeAndDoPage extends BasePage {
     /* ===== Article Page ===== */
     private final Locator articleBody;
 
-    private final Locator seeAndDoMenu;
+    private final Locator eatAndDrinkMenu;
 
-    public SeeAndDoPage(Page page) {
+    public EatAndDrinkPage(Page page) {
         super(page);
 
         /* Page Heading */
-        seeAndDoHeading =
-                page.locator("//h1[normalize-space()='See & Do']");
+        eatAndDrinkHeading = page.locator("//h1[normalize-space()='Eat & Drink']");
 
         /* Hero Section */
-        heroSection =
-                page.locator("//section[@data-title='Dynamic Listing 1']");
-        heroTitle =
-                heroSection.locator("//h2/a");
-        heroReadNowButton =
-                heroSection.locator("//a[normalize-space()='Read now']");
+        heroSection = page.locator("//section[@data-title='Dynamic Listing 1']");
+        heroTitle = heroSection.locator("h2 a");   // ✅ better scoped locator
+        heroReadNowButton = heroSection.locator("a:has-text('Read')");
 
         /* Latest */
-        latestSection =
-                page.locator("//section[@data-title='Latest']");
-        latestArticles =
-                page.locator("//section[@data-title='Latest']//div//img");
-        latestFirstArticle =
-                latestArticles.first();
+        latestSection = page.locator("//section[@data-title='Latest']");
+        latestArticles = latestSection.locator("img");  // ✅ scoped properly
+        latestFirstArticle = latestArticles.first();
 
         /* Popular */
-        popularSection =
-                page.locator("//section[@data-title='Popular']");
-        popularArticles =
-                page.locator("//section[@data-title='Popular']//div//img");
-        loadMoreButton =
-                page.locator("//button[normalize-space()='LOAD MORE']");
+        popularSection = page.locator("//section[@data-title='Popular']");
+        popularArticles = popularSection.locator("img");  // ✅ scoped
+        loadMoreButton = page.locator("//button[normalize-space()='LOAD MORE']");
 
-        /* Article Page (Breadcrumb check) */
-        articleBody =
-                page.locator("//a[contains(@class,'breadcrumb__link') and normalize-space()='See & Do']");
+        /* Article Page */
+        articleBody = page.locator("//a[contains(@class,'breadcrumb__link') and normalize-space()='Eat & Drink']");
 
         /* Menu */
-        seeAndDoMenu =
-                page.locator("//nav[@id='main-nav']//a[@href='/seeanddo']");
+        eatAndDrinkMenu = page.locator("//nav[@id='main-nav']//a[@href='/eatanddrink']");
     }
 
     /* ================= ACTIONS ================= */
 
     public void open() {
         openBaseUrl();
-        clickAndWaitForPageLoad(seeAndDoMenu);
+        clickAndWaitForPageLoad(eatAndDrinkMenu);
     }
 
     public void clickHeroReadNow() {
@@ -93,8 +82,8 @@ public class SeeAndDoPage extends BasePage {
 
     /* ================= VERIFICATIONS ================= */
 
-    public boolean isSeeAndDoPageVisible() {
-        return waitUntilVisible(seeAndDoHeading);
+    public boolean isEatAndDrinkPageVisible() {
+        return waitUntilVisible(eatAndDrinkHeading);
     }
 
     /* ===== Hero ===== */

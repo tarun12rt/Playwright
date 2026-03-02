@@ -1,9 +1,10 @@
-package pages;
+package pages.common;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import config.Config;
+import pages.base.BasePage;
 
 public class HomePage extends BasePage {
 

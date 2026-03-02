@@ -1,7 +1,8 @@
-package pages;
+package pages.common;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import pages.base.BasePage;
 
 public class LoginPage extends BasePage {
 
