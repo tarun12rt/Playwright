@@ -8,26 +8,26 @@ public class ShoppingPage extends BasePage {
 
     /* ================= LOCATORS ================= */
 
-    // Heading
-    private final Locator shoppingHeading;
+    // Page Heading
+    private final Locator heading;
 
     /* ===== Hero Section ===== */
     private final Locator heroSection;
     private final Locator heroTitle;
 
-    /* ===== 8days Tested Section ===== */
+    /* ===== 8days Tested ===== */
     private final Locator testedSection;
     private final Locator testedArticles;
 
-    /* ===== Latest Section ===== */
+    /* ===== Latest ===== */
     private final Locator latestSection;
     private final Locator latestArticles;
 
-    /* ===== Deals Section ===== */
+    /* ===== Deals ===== */
     private final Locator dealsSection;
     private final Locator dealsArticles;
 
-    /* ===== Check These Out Section ===== */
+    /* ===== Check These Out ===== */
     private final Locator checkTheseOutSection;
     private final Locator checkTheseOutArticles;
 
@@ -35,65 +35,52 @@ public class ShoppingPage extends BasePage {
     private final Locator loadMoreButton;
 
     /* ===== Article Page ===== */
-    private final Locator articleBody;
+    private final Locator articleBreadcrumb;
 
-    private final Locator shoppingMenu;
+    private final Locator menu;
 
     public ShoppingPage(Page page) {
         super(page);
 
-        /* Heading */
-        shoppingHeading =
-                page.locator("//h1[normalize-space()='Shopping']");
+        /* ===== Heading ===== */
+        heading = page.locator("//h1[normalize-space()='Shopping']");
 
-        /* Hero */
-        heroSection =
-                page.locator("//h1[normalize-space()='Shopping']/following::div[contains(@class,'article')][1]");
-        heroTitle =
-                heroSection.locator("//h2/a");
+        /* ===== Hero ===== */
+        heroSection = page.locator("//h1[normalize-space()='Shopping']/following::div[contains(@class,'article')][1]");
+        heroTitle = heroSection.locator("h2 a");
 
-        /* 8days Tested */
-        testedSection =
-                page.locator("//h2[normalize-space()='8days Tested']");
-        testedArticles =
-                page.locator("//h2[normalize-space()='8days Tested']/following::div[contains(@class,'article')]");
+        /* ===== 8days Tested ===== */
+        testedSection = page.locator("//h2[normalize-space()='8days Tested']");
+        testedArticles = testedSection.locator("xpath=following::div[contains(@class,'article')]");
 
-        /* Latest */
-        latestSection =
-                page.locator("//h2[normalize-space()='Latest']");
-        latestArticles =
-                page.locator("//h2[normalize-space()='Latest']/following::div[contains(@class,'article')]");
+        /* ===== Latest ===== */
+        latestSection = page.locator("//h2[normalize-space()='Latest']");
+        latestArticles = latestSection.locator("xpath=following::div[contains(@class,'article')]");
 
-        /* Deals */
-        dealsSection =
-                page.locator("//h2[normalize-space()='Deals']");
-        dealsArticles =
-                page.locator("//h2[normalize-space()='Deals']/following::div[contains(@class,'article')]");
+        /* ===== Deals ===== */
+        dealsSection = page.locator("//h2[normalize-space()='Deals']");
+        dealsArticles = dealsSection.locator("xpath=following::div[contains(@class,'article')]");
 
-        /* Check These Out */
-        checkTheseOutSection =
-                page.locator("//h2[normalize-space()='Check These Out']");
-        checkTheseOutArticles =
-                page.locator("//h2[normalize-space()='Check These Out']/following::div[contains(@class,'article')]");
+        /* ===== Check These Out ===== */
+        checkTheseOutSection = page.locator("//h2[normalize-space()='Check These Out']");
+        checkTheseOutArticles = checkTheseOutSection.locator("xpath=following::div[contains(@class,'article')]");
 
-        /* Load More */
-        loadMoreButton =
-                page.locator("//button[normalize-space()='LOAD MORE']");
+        /* ===== Load More ===== */
+        loadMoreButton = page.locator("//button[normalize-space()='LOAD MORE']");
 
-        /* Article Page (breadcrumb) */
-        articleBody =
-                page.locator("//a[contains(@class,'breadcrumb__link') and normalize-space()='Shopping']");
+        /* ===== Breadcrumb ===== */
+        articleBreadcrumb = page.locator(
+                "//a[contains(@class,'breadcrumb__link') and normalize-space()='Shopping']");
 
-        /* Menu */
-        shoppingMenu =
-                page.locator("//nav[@id='main-nav']//a[@href='/shopping']");
+        /* ===== Menu ===== */
+        menu = page.locator("//nav[@id='main-nav']//a[@href='/shopping']");
     }
 
     /* ================= ACTIONS ================= */
 
     public void open() {
         openBaseUrl();
-        clickAndWaitForPageLoad(shoppingMenu);
+        clickAndWaitForPageLoad(menu);
     }
 
     public void clickHeroArticle() {
@@ -107,13 +94,13 @@ public class ShoppingPage extends BasePage {
 
     /* ================= VERIFICATIONS ================= */
 
-    public boolean isShoppingPageVisible() {
-        return waitUntilVisible(shoppingHeading);
+    public boolean isPageVisible() {
+        return waitUntilVisible(heading);
     }
 
     /* ===== Hero ===== */
 
-    public boolean isHeroSectionVisible() {
+    public boolean isHeroVisible() {
         heroSection.scrollIntoViewIfNeeded();
         return waitUntilVisible(heroSection);
     }
@@ -140,6 +127,10 @@ public class ShoppingPage extends BasePage {
         return latestArticles.count() > 0;
     }
 
+    public int getLatestArticleCount() {
+        return latestArticles.count();
+    }
+
     /* ===== Deals ===== */
 
     public boolean isDealsSectionVisible() {
@@ -164,7 +155,7 @@ public class ShoppingPage extends BasePage {
 
     /* ===== Article Navigation ===== */
 
-    public boolean isArticlePageOpened() {
-        return waitUntilVisible(articleBody);
+    public boolean isArticleOpened() {
+        return waitUntilVisible(articleBreadcrumb);
     }
 }

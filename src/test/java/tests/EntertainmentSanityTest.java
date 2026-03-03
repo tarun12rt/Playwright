@@ -9,69 +9,69 @@ public class EntertainmentSanityTest extends BaseTestParallelExecution {
 
     private EntertainmentPage getEntertainmentPage() {
         System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
-        EntertainmentPage entertainmentPage = new EntertainmentPage(page());
-        entertainmentPage.open();
-        return entertainmentPage;
+        EntertainmentPage page = new EntertainmentPage(page());
+        page.open();
+        return page;
     }
 
     /* ================= PAGE LOAD ================= */
 
     @Test
     public void verifyEntertainmentPageLoads() {
-        EntertainmentPage entertainmentPage = getEntertainmentPage();
-        Assert.assertTrue(entertainmentPage.isEntertainmentPageVisible());
+        EntertainmentPage page = getEntertainmentPage();
+        Assert.assertTrue(page.isPageVisible(), "Page heading is not visible");
     }
 
     /* ================= HERO SECTION ================= */
 
     @Test
     public void verifyHeroSectionVisible() {
-        EntertainmentPage entertainmentPage = getEntertainmentPage();
-        Assert.assertTrue(entertainmentPage.isHeroSectionVisible());
-        Assert.assertTrue(entertainmentPage.isHeroTitleVisible());
-        Assert.assertTrue(entertainmentPage.isHeroReadNowButtonVisible());
+        EntertainmentPage page = getEntertainmentPage();
+        Assert.assertTrue(page.isHeroVisible(), "Hero section not visible");
+        Assert.assertTrue(page.isHeroTitleVisible(), "Hero title not visible");
+        Assert.assertTrue(page.isHeroReadNowButtonVisible(), "Hero Read Now button not visible");
     }
 
     @Test
     public void verifyHeroReadNowNavigation() {
-        EntertainmentPage entertainmentPage = getEntertainmentPage();
-        entertainmentPage.clickHeroReadNow();
-        Assert.assertTrue(entertainmentPage.isArticlePageOpened());
+        EntertainmentPage page = getEntertainmentPage();
+        page.clickHeroReadNow();
+        Assert.assertTrue(page.isArticleOpened(), "Hero article did not open");
     }
 
     /* ================= LATEST SECTION ================= */
 
     @Test
     public void verifyLatestSectionVisible() {
-        EntertainmentPage entertainmentPage = getEntertainmentPage();
-        Assert.assertTrue(entertainmentPage.isLatestSectionVisible());
-        Assert.assertTrue(entertainmentPage.hasAtLeastOneLatestArticle());
+        EntertainmentPage page = getEntertainmentPage();
+        Assert.assertTrue(page.isLatestSectionVisible(), "Latest section not visible");
+        Assert.assertTrue(page.hasAtLeastOneLatestArticle(), "No latest articles found");
     }
 
     @Test
     public void verifyLatestArticleNavigation() {
-        EntertainmentPage entertainmentPage = getEntertainmentPage();
-        entertainmentPage.clickFirstLatestArticle();
-        Assert.assertTrue(entertainmentPage.isArticlePageOpened());
+        EntertainmentPage page = getEntertainmentPage();
+        page.clickFirstLatestArticle();
+        Assert.assertTrue(page.isArticleOpened(), "Latest article did not open");
     }
 
     /* ================= POPULAR SECTION ================= */
 
     @Test
     public void verifyPopularSectionVisible() {
-        EntertainmentPage entertainmentPage = getEntertainmentPage();
-        Assert.assertTrue(entertainmentPage.isPopularSectionVisible());
-        Assert.assertTrue(entertainmentPage.hasAtLeastOnePopularArticle());
+        EntertainmentPage page = getEntertainmentPage();
+        Assert.assertTrue(page.isPopularSectionVisible(), "Popular section not visible");
+        Assert.assertTrue(page.hasPopularArticles(), "No popular articles found");
     }
 
     /* ================= LOAD MORE ================= */
 
     @Test
     public void verifyLoadMoreWorks() {
-        EntertainmentPage entertainmentPage = getEntertainmentPage();
-        int beforeCount = entertainmentPage.getPopularArticleCount();
-        entertainmentPage.clickLoadMore();
-        int afterCount = entertainmentPage.getPopularArticleCount();
-        Assert.assertTrue(afterCount > beforeCount);
+        EntertainmentPage page = getEntertainmentPage();
+        int before = page.getPopularArticleCount();
+        page.clickLoadMore();
+        int after = page.getPopularArticleCount();
+        Assert.assertTrue(after > before, "Load More did not increase article count");
     }
 }

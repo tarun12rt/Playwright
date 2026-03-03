@@ -19,7 +19,7 @@ public class ShoppingSanityTest extends BaseTestParallelExecution {
     @Test
     public void verifyShoppingPageLoads() {
         ShoppingPage page = getShoppingPage();
-        Assert.assertTrue(page.isShoppingPageVisible());
+        Assert.assertTrue(page.isPageVisible(), "Shopping page heading not visible");
     }
 
     /* ================= HERO ================= */
@@ -27,14 +27,14 @@ public class ShoppingSanityTest extends BaseTestParallelExecution {
     @Test
     public void verifyHeroSectionVisible() {
         ShoppingPage page = getShoppingPage();
-        Assert.assertTrue(page.isHeroSectionVisible());
+        Assert.assertTrue(page.isHeroVisible(), "Hero section not visible");
     }
 
     @Test
     public void verifyHeroNavigation() {
         ShoppingPage page = getShoppingPage();
         page.clickHeroArticle();
-        Assert.assertTrue(page.isArticlePageOpened());
+        Assert.assertTrue(page.isArticleOpened(), "Hero article did not open");
     }
 
     /* ================= 8days Tested ================= */
@@ -42,8 +42,8 @@ public class ShoppingSanityTest extends BaseTestParallelExecution {
     @Test
     public void verifyTestedSectionVisible() {
         ShoppingPage page = getShoppingPage();
-        Assert.assertTrue(page.isTestedSectionVisible());
-        Assert.assertTrue(page.hasTestedArticles());
+        Assert.assertTrue(page.isTestedSectionVisible(), "8days Tested section not visible");
+        Assert.assertTrue(page.hasTestedArticles(), "No Tested articles found");
     }
 
     /* ================= Latest ================= */
@@ -51,8 +51,8 @@ public class ShoppingSanityTest extends BaseTestParallelExecution {
     @Test
     public void verifyLatestSectionVisible() {
         ShoppingPage page = getShoppingPage();
-        Assert.assertTrue(page.isLatestSectionVisible());
-        Assert.assertTrue(page.hasLatestArticles());
+        Assert.assertTrue(page.isLatestSectionVisible(), "Latest section not visible");
+        Assert.assertTrue(page.hasLatestArticles(), "No Latest articles found");
     }
 
     /* ================= Deals ================= */
@@ -60,8 +60,8 @@ public class ShoppingSanityTest extends BaseTestParallelExecution {
     @Test
     public void verifyDealsSectionVisible() {
         ShoppingPage page = getShoppingPage();
-        Assert.assertTrue(page.isDealsSectionVisible());
-        Assert.assertTrue(page.hasDealsArticles());
+        Assert.assertTrue(page.isDealsSectionVisible(), "Deals section not visible");
+        Assert.assertTrue(page.hasDealsArticles(), "No Deals articles found");
     }
 
     /* ================= Check These Out ================= */
@@ -69,8 +69,8 @@ public class ShoppingSanityTest extends BaseTestParallelExecution {
     @Test
     public void verifyCheckTheseOutSectionVisible() {
         ShoppingPage page = getShoppingPage();
-        Assert.assertTrue(page.isCheckTheseOutVisible());
-        Assert.assertTrue(page.hasCheckTheseOutArticles());
+        Assert.assertTrue(page.isCheckTheseOutVisible(), "Check These Out section not visible");
+        Assert.assertTrue(page.hasCheckTheseOutArticles(), "No Check These Out articles found");
     }
 
     /* ================= Load More ================= */
@@ -78,6 +78,9 @@ public class ShoppingSanityTest extends BaseTestParallelExecution {
     @Test
     public void verifyLoadMoreWorks() {
         ShoppingPage page = getShoppingPage();
+        int before = page.getLatestArticleCount();
         page.clickLoadMore();
+        int after = page.getLatestArticleCount();
+        Assert.assertTrue(after > before, "Load More did not increase article count");
     }
 }
