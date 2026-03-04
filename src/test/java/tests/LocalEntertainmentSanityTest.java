@@ -9,67 +9,66 @@ public class LocalEntertainmentSanityTest extends BaseTestParallelExecution {
 
     private LocalEntertainmentPage getLocalPage() {
         System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
-        LocalEntertainmentPage localPage = new LocalEntertainmentPage(page());
-        localPage.open();
-        return localPage;
+        LocalEntertainmentPage page = new LocalEntertainmentPage(page());
+        page.open();
+        return page;
     }
 
     /* ================= PAGE LOAD ================= */
 
     @Test
     public void verifyLocalPageLoads() {
-        LocalEntertainmentPage localPage = getLocalPage();
-        Assert.assertTrue(localPage.isLocalPageTitleVisible());
+        LocalEntertainmentPage page = getLocalPage();
+        Assert.assertTrue(page.isPageVisible(), "Local page heading not visible");
     }
-
 
     /* ================= HERO SECTION ================= */
 
     @Test
     public void verifyHeroSectionVisible() {
-        LocalEntertainmentPage localPage = getLocalPage();
-        Assert.assertTrue(localPage.isHeroSectionVisible());
-        Assert.assertTrue(localPage.isHeroTitleVisible());
-        Assert.assertTrue(localPage.isHeroReadNowButtonVisible());
+        LocalEntertainmentPage page = getLocalPage();
+        Assert.assertTrue(page.isHeroVisible(), "Hero section not visible");
+        Assert.assertTrue(page.isHeroTitleVisible(), "Hero title not visible");
+        Assert.assertTrue(page.isHeroReadNowButtonVisible(), "Hero Read Now not visible");
     }
 
     @Test
     public void verifyHeroReadNowNavigation() {
-        LocalEntertainmentPage localPage = getLocalPage();
-        localPage.clickHeroReadNow();
-        Assert.assertTrue(localPage.isArticlePageOpened());
+        LocalEntertainmentPage page = getLocalPage();
+        page.clickHeroReadNow();
+        Assert.assertTrue(page.isArticleOpened(), "Hero article did not open");
     }
 
     /* ================= ARTICLE LIST SECTION ================= */
 
     @Test
     public void verifyArticleListVisible() {
-        LocalEntertainmentPage localPage = getLocalPage();
-        Assert.assertTrue(localPage.isArticleListVisible());
-        Assert.assertTrue(localPage.hasAtLeastOneArticle());
+        LocalEntertainmentPage page = getLocalPage();
+        Assert.assertTrue(page.isArticleSectionVisible(), "Article list not visible");
+        Assert.assertTrue(page.hasAtLeastOneArticle(), "No articles found");
     }
 
     @Test
     public void verifyArticleNavigation() {
-        LocalEntertainmentPage localPage = getLocalPage();
-        localPage.clickFirstArticle();
-        Assert.assertTrue(localPage.isArticlePageOpened());
+        LocalEntertainmentPage page = getLocalPage();
+        page.clickFirstArticle();
+        Assert.assertTrue(page.isArticleOpened(), "Article did not open");
     }
 
     /* ================= LOAD MORE ================= */
 
     @Test
     public void verifyLoadMoreButtonVisible() {
-        LocalEntertainmentPage localPage = getLocalPage();
-        Assert.assertTrue(localPage.isLoadMoreButtonVisible());
+        LocalEntertainmentPage page = getLocalPage();
+        Assert.assertTrue(page.isLoadMoreButtonVisible(), "Load More button not visible");
     }
 
     @Test
     public void verifyLoadMoreFunctionality() {
-        LocalEntertainmentPage localPage = getLocalPage();
-        int beforeCount = localPage.getArticleCount();
-        localPage.clickLoadMore();
-        int afterCount = localPage.getArticleCount();
-        Assert.assertTrue(afterCount > beforeCount);
+        LocalEntertainmentPage page = getLocalPage();
+        int before = page.getArticleCount();
+        page.clickLoadMore();
+        int after = page.getArticleCount();
+        Assert.assertTrue(after > before, "Load More did not increase article count");
     }
 }
