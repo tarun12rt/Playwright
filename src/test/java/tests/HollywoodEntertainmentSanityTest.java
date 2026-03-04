@@ -9,67 +9,66 @@ public class HollywoodEntertainmentSanityTest extends BaseTestParallelExecution 
 
     private HollywoodEntertainmentPage getHollywoodPage() {
         System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
-        HollywoodEntertainmentPage hollywoodEntertainmentPage = new HollywoodEntertainmentPage(page());
-        hollywoodEntertainmentPage.open();
-        return hollywoodEntertainmentPage;
+        HollywoodEntertainmentPage page = new HollywoodEntertainmentPage(page());
+        page.open();
+        return page;
     }
 
     /* ================= PAGE LOAD ================= */
 
     @Test
-    public void verifyLocalPageLoads() {
-        HollywoodEntertainmentPage hollywoodEntertainmentPage = getHollywoodPage();
-        Assert.assertTrue(hollywoodEntertainmentPage.isHollywoodPageTitleVisible());
+    public void verifyHollywoodPageLoads() {
+        HollywoodEntertainmentPage page = getHollywoodPage();
+        Assert.assertTrue(page.isPageVisible(), "Hollywood page heading not visible");
     }
-
 
     /* ================= HERO SECTION ================= */
 
     @Test
     public void verifyHeroSectionVisible() {
-        HollywoodEntertainmentPage hollywoodEntertainmentPage = getHollywoodPage();
-        Assert.assertTrue(hollywoodEntertainmentPage.isHeroSectionVisible());
-        Assert.assertTrue(hollywoodEntertainmentPage.isHeroTitleVisible());
-        Assert.assertTrue(hollywoodEntertainmentPage.isHeroReadNowButtonVisible());
+        HollywoodEntertainmentPage page = getHollywoodPage();
+        Assert.assertTrue(page.isHeroVisible(), "Hero section not visible");
+        Assert.assertTrue(page.isHeroTitleVisible(), "Hero title not visible");
+        Assert.assertTrue(page.isHeroReadNowButtonVisible(), "Hero Read Now button not visible");
     }
 
     @Test
     public void verifyHeroReadNowNavigation() {
-        HollywoodEntertainmentPage hollywoodEntertainmentPage = getHollywoodPage();
-        hollywoodEntertainmentPage.clickHeroReadNow();
-        Assert.assertTrue(hollywoodEntertainmentPage.isArticlePageOpened());
+        HollywoodEntertainmentPage page = getHollywoodPage();
+        page.clickHeroReadNow();
+        Assert.assertTrue(page.isArticleOpened(), "Hero article did not open");
     }
 
-    /* ================= ARTICLE LIST SECTION ================= */
+    /* ================= ARTICLE LIST ================= */
 
     @Test
-    public void verifyArticleListVisible() {
-        HollywoodEntertainmentPage hollywoodEntertainmentPage = getHollywoodPage();
-        Assert.assertTrue(hollywoodEntertainmentPage.isArticleListVisible());
-        Assert.assertTrue(hollywoodEntertainmentPage.hasAtLeastOneArticle());
+    public void verifyArticleSectionVisible() {
+        HollywoodEntertainmentPage page = getHollywoodPage();
+        Assert.assertTrue(page.isArticleSectionVisible(), "Article list not visible");
+        Assert.assertTrue(page.hasAtLeastOneArticle(), "No articles found");
     }
 
     @Test
     public void verifyArticleNavigation() {
-        HollywoodEntertainmentPage hollywoodEntertainmentPage = getHollywoodPage();
-        hollywoodEntertainmentPage.clickFirstArticle();
-        Assert.assertTrue(hollywoodEntertainmentPage.isArticlePageOpened());
+        HollywoodEntertainmentPage page = getHollywoodPage();
+        page.clickFirstArticle();
+        Assert.assertTrue(page.isArticleOpened(), "Article did not open");
     }
 
     /* ================= LOAD MORE ================= */
 
     @Test
     public void verifyLoadMoreButtonVisible() {
-        HollywoodEntertainmentPage hollywoodEntertainmentPage = getHollywoodPage();
-        Assert.assertTrue(hollywoodEntertainmentPage.isLoadMoreButtonVisible());
+        HollywoodEntertainmentPage page = getHollywoodPage();
+        Assert.assertTrue(page.isLoadMoreButtonVisible(), "Load More button not visible");
     }
 
     @Test
     public void verifyLoadMoreFunctionality() {
-        HollywoodEntertainmentPage hollywoodEntertainmentPage = getHollywoodPage();
-        int beforeCount = hollywoodEntertainmentPage.getArticleCount();
-        hollywoodEntertainmentPage.clickLoadMore();
-        int afterCount = hollywoodEntertainmentPage.getArticleCount();
-        Assert.assertTrue(afterCount > beforeCount);
+        HollywoodEntertainmentPage page = getHollywoodPage();
+        int before = page.getArticleCount();
+        page.clickLoadMore();
+        int after = page.getArticleCount();
+        Assert.assertTrue(after > before, "Load More did not increase article count");
     }
 }
