@@ -3,12 +3,12 @@ package tests;
 import runner.BaseTestParallelExecution;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.subcategories.EatAndDrinkNewsReviewsPage;
+import pages.subcategories.EatAndDrink_NewsReviewsPage;
 
-public class EatAndDrinkNewsReviewsSanityTest extends BaseTestParallelExecution {
+public class EatAndDrink_NewsReviewsSanityTest extends BaseTestParallelExecution {
 
-    private EatAndDrinkNewsReviewsPage getPage() {
-        EatAndDrinkNewsReviewsPage page = new EatAndDrinkNewsReviewsPage(page());
+    private EatAndDrink_NewsReviewsPage getPage() {
+        EatAndDrink_NewsReviewsPage page = new EatAndDrink_NewsReviewsPage(page());
         page.open();
         return page;
     }
@@ -20,7 +20,7 @@ public class EatAndDrinkNewsReviewsSanityTest extends BaseTestParallelExecution 
 
     @Test
     public void verifyHeroSection() {
-        EatAndDrinkNewsReviewsPage page = getPage();
+        EatAndDrink_NewsReviewsPage page = getPage();
         Assert.assertTrue(page.isHeroVisible());
         Assert.assertTrue(page.isHeroTitleVisible());
         Assert.assertTrue(page.isHeroReadNowButtonVisible());
@@ -28,14 +28,14 @@ public class EatAndDrinkNewsReviewsSanityTest extends BaseTestParallelExecution 
 
     @Test
     public void verifyArticleSection() {
-        EatAndDrinkNewsReviewsPage page = getPage();
+        EatAndDrink_NewsReviewsPage page = getPage();
         Assert.assertTrue(page.isArticleSectionVisible());
         Assert.assertTrue(page.hasAtLeastOneArticle());
     }
 
     @Test
     public void verifyLoadMore() {
-        EatAndDrinkNewsReviewsPage page = getPage();
+        EatAndDrink_NewsReviewsPage page = getPage();
         int before = page.getArticleCount();
         page.clickLoadMore();
         int after = page.getArticleCount();

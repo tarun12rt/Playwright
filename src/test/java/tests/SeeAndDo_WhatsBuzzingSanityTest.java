@@ -3,13 +3,13 @@ package tests;
 import runner.BaseTestParallelExecution;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.subcategories.HollywoodEntertainmentPage;
+import pages.subcategories.SeeAndDo_WhatsBuzzingPage;
 
-public class HollywoodEntertainmentSanityTest extends BaseTestParallelExecution {
+public class SeeAndDo_WhatsBuzzingSanityTest extends BaseTestParallelExecution {
 
-    private HollywoodEntertainmentPage getHollywoodPage() {
+    private SeeAndDo_WhatsBuzzingPage getWhatsBuzzingPage() {
         System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
-        HollywoodEntertainmentPage page = new HollywoodEntertainmentPage(page());
+        SeeAndDo_WhatsBuzzingPage page = new SeeAndDo_WhatsBuzzingPage(page());
         page.open();
         return page;
     }
@@ -17,40 +17,40 @@ public class HollywoodEntertainmentSanityTest extends BaseTestParallelExecution 
     /* ================= PAGE LOAD ================= */
 
     @Test
-    public void verifyHollywoodPageLoads() {
-        HollywoodEntertainmentPage page = getHollywoodPage();
-        Assert.assertTrue(page.isPageVisible(), "Hollywood page heading not visible");
+    public void verifyWhatsBuzzingPageLoads() {
+        SeeAndDo_WhatsBuzzingPage page = getWhatsBuzzingPage();
+        Assert.assertTrue(page.isPageVisible(), "What's Buzzing page heading not visible");
     }
 
     /* ================= HERO SECTION ================= */
 
     @Test
-    public void verifyHeroSectionVisible() {
-        HollywoodEntertainmentPage page = getHollywoodPage();
+    public void verifyHeroSection() {
+        SeeAndDo_WhatsBuzzingPage page = getWhatsBuzzingPage();
         Assert.assertTrue(page.isHeroVisible(), "Hero section not visible");
         Assert.assertTrue(page.isHeroTitleVisible(), "Hero title not visible");
         Assert.assertTrue(page.isHeroReadNowButtonVisible(), "Hero Read Now button not visible");
     }
 
     @Test
-    public void verifyHeroReadNowNavigation() {
-        HollywoodEntertainmentPage page = getHollywoodPage();
+    public void verifyHeroNavigation() {
+        SeeAndDo_WhatsBuzzingPage page = getWhatsBuzzingPage();
         page.clickHeroReadNow();
         Assert.assertTrue(page.isArticleOpened(), "Hero article did not open");
     }
 
-    /* ================= ARTICLE LIST ================= */
+    /* ================= ARTICLE SECTION ================= */
 
     @Test
-    public void verifyArticleSectionVisible() {
-        HollywoodEntertainmentPage page = getHollywoodPage();
-        Assert.assertTrue(page.isArticleSectionVisible(), "Article list not visible");
+    public void verifyArticleSection() {
+        SeeAndDo_WhatsBuzzingPage page = getWhatsBuzzingPage();
+        Assert.assertTrue(page.isArticleSectionVisible(), "Article section not visible");
         Assert.assertTrue(page.hasAtLeastOneArticle(), "No articles found");
     }
 
     @Test
     public void verifyArticleNavigation() {
-        HollywoodEntertainmentPage page = getHollywoodPage();
+        SeeAndDo_WhatsBuzzingPage page = getWhatsBuzzingPage();
         page.clickFirstArticle();
         Assert.assertTrue(page.isArticleOpened(), "Article did not open");
     }
@@ -58,14 +58,8 @@ public class HollywoodEntertainmentSanityTest extends BaseTestParallelExecution 
     /* ================= LOAD MORE ================= */
 
     @Test
-    public void verifyLoadMoreButtonVisible() {
-        HollywoodEntertainmentPage page = getHollywoodPage();
-        Assert.assertTrue(page.isLoadMoreButtonVisible(), "Load More button not visible");
-    }
-
-    @Test
-    public void verifyLoadMoreFunctionality() {
-        HollywoodEntertainmentPage page = getHollywoodPage();
+    public void verifyLoadMoreWorks() {
+        SeeAndDo_WhatsBuzzingPage page = getWhatsBuzzingPage();
         int before = page.getArticleCount();
         page.clickLoadMore();
         int after = page.getArticleCount();

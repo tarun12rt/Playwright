@@ -3,9 +3,9 @@ package pages.subcategories;
 import com.microsoft.playwright.Page;
 import pages.base.AbstractSubCategoryPage;
 
-public class HollywoodEntertainmentPage extends AbstractSubCategoryPage {
+public class Entertainment_HollywoodPage extends AbstractSubCategoryPage {
 
-    public HollywoodEntertainmentPage(Page page) {
+    public Entertainment_HollywoodPage(Page page) {
         super(
                 page,
                 "/entertainment",  // Main menu href
