@@ -3,13 +3,13 @@ package tests;
 import runner.BaseTestParallelExecution;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.subcategories.AsianEntertainmentPage;
+import pages.subcategories.SeeAndDo_ThingsToDoPage;
 
-public class AsianEntertainmentSanityTest extends BaseTestParallelExecution {
+public class SeeAndDo_ThingsToDoSanityTest extends BaseTestParallelExecution {
 
-    private AsianEntertainmentPage getAsianPage() {
+    private SeeAndDo_ThingsToDoPage getThingsToDoPage() {
         System.out.println("Running on Thread ID: " + Thread.currentThread().getId());
-        AsianEntertainmentPage page = new AsianEntertainmentPage(page());
+        SeeAndDo_ThingsToDoPage page = new SeeAndDo_ThingsToDoPage(page());
         page.open();
         return page;
     }
@@ -17,16 +17,16 @@ public class AsianEntertainmentSanityTest extends BaseTestParallelExecution {
     /* ================= PAGE LOAD ================= */
 
     @Test
-    public void verifyAsianPageLoads() {
-        AsianEntertainmentPage page = getAsianPage();
-        Assert.assertTrue(page.isPageVisible(), "Asian page heading not visible");
+    public void verifyThingsToDoPageLoads() {
+        SeeAndDo_ThingsToDoPage page = getThingsToDoPage();
+        Assert.assertTrue(page.isPageVisible(), "Things To Do page heading not visible");
     }
 
     /* ================= HERO SECTION ================= */
 
     @Test
     public void verifyHeroSection() {
-        AsianEntertainmentPage page = getAsianPage();
+        SeeAndDo_ThingsToDoPage page = getThingsToDoPage();
         Assert.assertTrue(page.isHeroVisible(), "Hero section not visible");
         Assert.assertTrue(page.isHeroTitleVisible(), "Hero title not visible");
         Assert.assertTrue(page.isHeroReadNowButtonVisible(), "Hero Read Now button not visible");
@@ -34,7 +34,7 @@ public class AsianEntertainmentSanityTest extends BaseTestParallelExecution {
 
     @Test
     public void verifyHeroNavigation() {
-        AsianEntertainmentPage page = getAsianPage();
+        SeeAndDo_ThingsToDoPage page = getThingsToDoPage();
         page.clickHeroReadNow();
         Assert.assertTrue(page.isArticleOpened(), "Hero article did not open");
     }
@@ -43,14 +43,14 @@ public class AsianEntertainmentSanityTest extends BaseTestParallelExecution {
 
     @Test
     public void verifyArticleSection() {
-        AsianEntertainmentPage page = getAsianPage();
+        SeeAndDo_ThingsToDoPage page = getThingsToDoPage();
         Assert.assertTrue(page.isArticleSectionVisible(), "Article section not visible");
         Assert.assertTrue(page.hasAtLeastOneArticle(), "No articles found");
     }
 
     @Test
     public void verifyArticleNavigation() {
-        AsianEntertainmentPage page = getAsianPage();
+        SeeAndDo_ThingsToDoPage page = getThingsToDoPage();
         page.clickFirstArticle();
         Assert.assertTrue(page.isArticleOpened(), "Article did not open");
     }
@@ -59,7 +59,7 @@ public class AsianEntertainmentSanityTest extends BaseTestParallelExecution {
 
     @Test
     public void verifyLoadMoreWorks() {
-        AsianEntertainmentPage page = getAsianPage();
+        SeeAndDo_ThingsToDoPage page = getThingsToDoPage();
         int before = page.getArticleCount();
         page.clickLoadMore();
         int after = page.getArticleCount();

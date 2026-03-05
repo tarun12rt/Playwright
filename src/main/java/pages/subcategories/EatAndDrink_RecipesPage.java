@@ -3,14 +3,14 @@ package pages.subcategories;
 import com.microsoft.playwright.Page;
 import pages.base.AbstractSubCategoryPage;
 
-public class KopitiamPage extends AbstractSubCategoryPage {
+public class EatAndDrink_RecipesPage extends AbstractSubCategoryPage {
 
-    public KopitiamPage(Page page) {
+    public EatAndDrink_RecipesPage(Page page) {
         super(
                 page,
                 "/eatanddrink",
-                "Kopitiam",
-                "Kopitiam",
+                "Recipes",
+                "Recipes",
                 "Eat & Drink"
         );
     }

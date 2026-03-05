@@ -3,12 +3,12 @@ package tests;
 import runner.BaseTestParallelExecution;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.subcategories.KopitiamPage;
+import pages.subcategories.EatAndDrink_HawkerFoodPage;
 
-public class KopitiamSanityTest extends BaseTestParallelExecution {
+public class EatAndDrink_HawkerFoodSanityTest extends BaseTestParallelExecution {
 
-    private KopitiamPage getPage() {
-        KopitiamPage page = new KopitiamPage(page());
+    private EatAndDrink_HawkerFoodPage getPage() {
+        EatAndDrink_HawkerFoodPage page = new EatAndDrink_HawkerFoodPage(page());
         page.open();
         return page;
     }
@@ -20,7 +20,7 @@ public class KopitiamSanityTest extends BaseTestParallelExecution {
 
     @Test
     public void verifyHeroAndArticles() {
-        KopitiamPage page = getPage();
+        EatAndDrink_HawkerFoodPage page = getPage();
         Assert.assertTrue(page.isHeroVisible());
         Assert.assertTrue(page.hasAtLeastOneArticle());
     }
