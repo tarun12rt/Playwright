@@ -4,14 +4,20 @@ import com.microsoft.playwright.*;
 import com.aventstack.extentreports.*;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
+
 import utils.BrowserFactory;
+import utils.BrowserStackCapabilityManager;
 import utils.ExtentManager;
 import config.Config;
+
+import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 public class BaseTestParallelExecution {
 
@@ -46,7 +52,35 @@ public class BaseTestParallelExecution {
         Playwright pw = Playwright.create();
         playwright.set(pw);
 
-        Browser br = BrowserFactory.getBrowser(pw);
+        Browser br;
+        String platform = Config.get("platform");
+
+        /* ================= LOCAL EXECUTION ================= */
+
+        if ("local".equalsIgnoreCase(platform)) {
+
+            br = BrowserFactory.getBrowser(pw);
+
+        }
+
+        /* ================= BROWSERSTACK EXECUTION ================= */
+
+        else {
+
+            JSONObject caps = BrowserStackCapabilityManager.getCapabilities();
+
+            caps.put("browserstack.username", Config.get("BS_Username"));
+            caps.put("browserstack.accessKey", Config.get("BS_Password"));
+
+            caps.put("build", "Playwright Automation Framework");
+            caps.put("name", method.getName());
+
+            String wsEndpoint = "wss://cdp.browserstack.com/playwright?caps="
+                    + URLEncoder.encode(caps.toString(), StandardCharsets.UTF_8);
+
+            br = pw.chromium().connectOverCDP(wsEndpoint);
+        }
+
         browser.set(br);
 
         Browser.NewContextOptions options = new Browser.NewContextOptions();
@@ -75,7 +109,6 @@ public class BaseTestParallelExecution {
 
         try {
 
-            /* ---------- Screenshot on failure ---------- */
             if (result.getStatus() == ITestResult.FAILURE && currentPage != null) {
 
                 Path screenshotDir = Paths.get("test-output/screenshots");
@@ -94,12 +127,10 @@ public class BaseTestParallelExecution {
                 );
             }
 
-            /* ---------- CLOSE CONTEXT FIRST (CRITICAL) ---------- */
             if (currentContext != null) {
                 currentContext.close();
             }
 
-            /* ---------- Attach VIDEO ONLY for FAILED tests ---------- */
             if (result.getStatus() == ITestResult.FAILURE
                     && currentPage != null
                     && currentPage.video() != null) {
@@ -116,7 +147,6 @@ public class BaseTestParallelExecution {
                 String relativeVideoPath =
                         "../videos/" + finalVideo.getFileName();
 
-                // ✅ ONLY reliable way to show video in Extent
                 test.get().info(
                         "<video width='720' height='405' controls>" +
                                 "<source src='" + relativeVideoPath + "' type='video/webm'>" +
@@ -127,9 +157,10 @@ public class BaseTestParallelExecution {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
+        }
 
-            /* ---------- HARD CLEANUP (Jenkins safe) ---------- */
+        finally {
+
             try {
                 if (browser.get() != null) browser.get().close();
             } catch (Exception ignored) {}
