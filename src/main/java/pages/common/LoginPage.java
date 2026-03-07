@@ -57,23 +57,23 @@ public class LoginPage extends BasePage {
 
     // --- Verifications ---
     public boolean isLoginFormVisible() {
-        return safeIsVisible(emailInput)
-                && safeIsVisible(passwordInput)
-                && safeIsVisible(signInButton);
+        return waitUntilVisible(emailInput)
+                && waitUntilVisible(passwordInput)
+                && waitUntilVisible(signInButton);
     }
 
     public boolean areSocialLoginButtonsVisible() {
-        return safeIsVisible(continueWithApple)
-                && safeIsVisible(continueWithFacebook)
-                && safeIsVisible(continueWithGoogle);
+        return waitUntilVisible(continueWithApple)
+                && waitUntilVisible(continueWithFacebook)
+                && waitUntilVisible(continueWithGoogle);
     }
 
     public boolean areFooterLinksVisible() {
         scrollTo(termsOfService);
-        return safeIsVisible(termsOfService)
-                && safeIsVisible(privacyPolicy)
-                && safeIsVisible(reportVulnerability)
-                && safeIsVisible(onlineLinksPolicy);
+        return waitUntilVisible(termsOfService)
+                && waitUntilVisible(privacyPolicy)
+                && waitUntilVisible(reportVulnerability)
+                && waitUntilVisible(onlineLinksPolicy);
     }
 
     public void enterEmail(String email) {
@@ -98,8 +98,7 @@ public class LoginPage extends BasePage {
     }
 
     public boolean verifyLoggedInProfileIcon() {
-       boolean element = safeIsVisible(loggedInProfileIcon);
-       return element;
+       return waitUntilVisible(loggedInProfileIcon);
 
     }
 }

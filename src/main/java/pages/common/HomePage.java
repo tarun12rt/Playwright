@@ -89,31 +89,31 @@ public class HomePage extends BasePage {
     // --- Verifications ---
 
     public boolean isHomepageVisible() {
-        return safeIsVisible(homepageContainer);
+        return waitUntilVisible(homepageContainer);
     }
 
     /* ===== Read This ===== */
 
     public boolean isReadThisSectionVisible() {
-        return safeIsVisible(readThisSection);
+        return waitUntilVisible(readThisSection);
     }
 
     public boolean isReadThisImageVisible() {
-        return safeIsVisible(readThisImage);
+        return waitUntilVisible(readThisImage);
     }
 
     public boolean isReadThisTitleVisible() {
-        return safeIsVisible(readThisTitle);
+        return waitUntilVisible(readThisTitle);
     }
 
     public boolean isReadNowButtonVisible() {
-        return safeIsVisible(readNowButton);
+        return waitUntilVisible(readNowButton);
     }
 
     /* ===== Latest ===== */
 
     public boolean isLatestSectionVisible() {
-        return safeIsVisible(latestSection);
+        return waitUntilVisible(latestSection);
     }
 
     public int getLatestArticlesCount() {
@@ -133,7 +133,7 @@ public class HomePage extends BasePage {
     public boolean isSectionVisible(String sectionName) {
         Locator sectionHeader = page.locator("h2", new Page.LocatorOptions().setHasText(sectionName)).first();
         scrollTo(sectionHeader);
-        return safeIsVisible(sectionHeader);
+        return waitUntilVisible(sectionHeader);
     }
 
 
@@ -146,7 +146,7 @@ public class HomePage extends BasePage {
     /* ===== Article ===== */
 
     public boolean isArticlePageOpened() {
-        return safeIsVisible(articleBody);
+        return waitUntilVisible(articleBody);
     }
 
     public boolean isNavigatedAwayFromHome() {
@@ -278,9 +278,9 @@ public class HomePage extends BasePage {
 
     public boolean isNewsletterSectionVisible() {
         scrollTo(newsletterSection);
-        return safeIsVisible(newsletterSection)
-                && safeIsVisible(newsletterEmailInput)
-                && safeIsVisible(newsletterSubscribeButton);
+        return waitUntilVisible(newsletterSection)
+                && waitUntilVisible(newsletterEmailInput)
+                && waitUntilVisible(newsletterSubscribeButton);
     }
 
     public boolean isErrorShownForEmptyEmail() {
@@ -291,7 +291,7 @@ public class HomePage extends BasePage {
         safeClick(newsletterSubscribeButton);
 
         // Check error message appears
-        return safeIsVisible(newsletterErrorMessage);
+        return waitUntilVisible(newsletterErrorMessage);
     }
 
 }

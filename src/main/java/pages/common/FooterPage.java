@@ -38,7 +38,7 @@ public class FooterPage extends BasePage {
 
 
     public boolean isFooterVisible() {
-        return safeIsVisible(onlineLinksPolicy);
+        return waitUntilVisible(onlineLinksPolicy);
     }
 
     public void open() {
@@ -71,10 +71,10 @@ public class FooterPage extends BasePage {
 
         scrollTo(about8Days);
 
-        return safeIsVisible(footerLogo)
-                && safeIsVisible(spamTitle)
-                && safeIsVisible(spamDescription)
-                && safeIsVisible(consentText);
+        return waitUntilVisible(footerLogo)
+                && waitUntilVisible(spamTitle)
+                && waitUntilVisible(spamDescription)
+                && waitUntilVisible(consentText);
     }
 
 
