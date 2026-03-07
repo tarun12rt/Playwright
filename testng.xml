@@ -7,7 +7,6 @@
     <test name="UI Tests">
         <classes>
             <class name="tests.EatAndDrinkSanityTest"/>
-&lt;!&ndash;            <class name="tests.FooterTest"/>&ndash;&gt;
         </classes>
     </test>
 
