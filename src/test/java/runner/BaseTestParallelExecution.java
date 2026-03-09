@@ -55,7 +55,7 @@ public class BaseTestParallelExecution {
         Browser br;
         String platform = Config.get("platform");
 
-        /* ================= LOCAL EXECUTION ================= */
+        /* LOCAL EXECUTION */
 
         if ("local".equalsIgnoreCase(platform)) {
 
@@ -63,7 +63,7 @@ public class BaseTestParallelExecution {
 
         }
 
-        /* ================= BROWSERSTACK EXECUTION ================= */
+        /* BROWSERSTACK EXECUTION */
 
         else {
 
@@ -86,7 +86,8 @@ public class BaseTestParallelExecution {
         Browser.NewContextOptions options = new Browser.NewContextOptions();
 
         if (Config.getBoolean("video.recording")) {
-            options.setRecordVideoDir(Paths.get("test-output/videos"))
+
+            options.setRecordVideoDir(Paths.get("test-output/latest-report/videos"))
                    .setRecordVideoSize(1280, 720);
         }
 
@@ -109,53 +110,79 @@ public class BaseTestParallelExecution {
 
         try {
 
+            /* ================= PASS ================= */
+
+            if (result.getStatus() == ITestResult.SUCCESS) {
+
+                test.get().pass("Test Passed");
+
+            }
+
+            /* ================= FAILURE ================= */
+
             if (result.getStatus() == ITestResult.FAILURE && currentPage != null) {
 
-                Path screenshotDir = Paths.get("test-output/screenshots");
+                Path screenshotDir = Paths.get("test-output/latest-report/screenshots");
                 Files.createDirectories(screenshotDir);
 
                 Path screenshotPath =
                         screenshotDir.resolve(result.getName() + ".png");
 
                 currentPage.screenshot(
-                        new Page.ScreenshotOptions().setPath(screenshotPath)
+                        new Page.ScreenshotOptions().setPath(screenshotPath).setFullPage(true)
                 );
 
                 test.get().fail(result.getThrowable());
+
                 test.get().addScreenCaptureFromPath(
-                        "../screenshots/" + screenshotPath.getFileName()
+                        "screenshots/" + screenshotPath.getFileName()
                 );
             }
+
+            /* ================= SKIP ================= */
+
+            if (result.getStatus() == ITestResult.SKIP) {
+
+                test.get().skip(result.getThrowable());
+
+            }
+
+            /* ================= CLOSE CONTEXT ================= */
 
             if (currentContext != null) {
                 currentContext.close();
             }
 
-            if (result.getStatus() == ITestResult.FAILURE
+            /* ================= VIDEO ATTACHMENT ================= */
+
+            if (Config.getBoolean("video.recording")
+                    && result.getStatus() == ITestResult.FAILURE
                     && currentPage != null
                     && currentPage.video() != null) {
 
-                Path videoDir = Paths.get("test-output/videos");
+                Path videoDir = Paths.get("test-output/latest-report/videos");
                 Files.createDirectories(videoDir);
 
                 Path videoPath = currentPage.video().path();
+
                 Path finalVideo =
                         videoDir.resolve(result.getName() + ".webm");
 
                 Files.move(videoPath, finalVideo);
 
                 String relativeVideoPath =
-                        "../videos/" + finalVideo.getFileName();
+                        "videos/" + finalVideo.getFileName();
 
                 test.get().info(
                         "<video width='720' height='405' controls>" +
                                 "<source src='" + relativeVideoPath + "' type='video/webm'>" +
-                                "Your browser does not support the video tag." +
                                 "</video>"
                 );
             }
 
-        } catch (Exception e) {
+        }
+
+        catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -181,8 +208,10 @@ public class BaseTestParallelExecution {
 
     @AfterSuite(alwaysRun = true)
     public void flushReport() {
+
         if (extent != null) {
             extent.flush();
         }
+
     }
 }
