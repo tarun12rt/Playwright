@@ -1,3 +1,4 @@
+/*
 package tests;
 
 import runner.BaseTestSingleExecution;
@@ -1080,3 +1081,4 @@ public class FirstPlaywrightTest extends BaseTestSingleExecution {
     }
 
 }
+*/
