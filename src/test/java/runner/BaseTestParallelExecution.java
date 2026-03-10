@@ -41,6 +41,44 @@ public class BaseTestParallelExecution {
 
     @BeforeSuite(alwaysRun = true)
     public void startReport() {
+
+        /* ===== Clean previous execution artifacts ===== */
+
+        try {
+
+            Path screenshots = Paths.get("test-output/latest-report/screenshots");
+            Path videos = Paths.get("test-output/latest-report/videos");
+            Path report = Paths.get("test-output/latest-report/ExtentReport.html");
+            Path zip = Paths.get("test-output/latest-report.zip");
+
+            if (Files.exists(screenshots)) {
+                Files.walk(screenshots)
+                     .filter(Files::isRegularFile)
+                     .forEach(file -> {
+                         try { Files.delete(file); } catch (Exception ignored) {}
+                     });
+            }
+
+            if (Files.exists(videos)) {
+                Files.walk(videos)
+                     .filter(Files::isRegularFile)
+                     .forEach(file -> {
+                         try { Files.delete(file); } catch (Exception ignored) {}
+                     });
+            }
+
+            if (Files.exists(report)) {
+                Files.delete(report);
+            }
+
+            if (Files.exists(zip)) {
+                Files.delete(zip);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         extent = ExtentManager.getExtent();
     }
 
@@ -55,17 +93,11 @@ public class BaseTestParallelExecution {
         Browser br;
         String platform = Config.get("platform");
 
-        /* LOCAL EXECUTION */
-
         if ("local".equalsIgnoreCase(platform)) {
 
             br = BrowserFactory.getBrowser(pw);
 
-        }
-
-        /* BROWSERSTACK EXECUTION */
-
-        else {
+        } else {
 
             JSONObject caps = BrowserStackCapabilityManager.getCapabilities();
 
@@ -110,15 +142,10 @@ public class BaseTestParallelExecution {
 
         try {
 
-            /* ================= PASS ================= */
-
             if (result.getStatus() == ITestResult.SUCCESS) {
 
                 test.get().pass("Test Passed");
-
             }
-
-            /* ================= FAILURE ================= */
 
             if (result.getStatus() == ITestResult.FAILURE && currentPage != null) {
 
@@ -139,45 +166,48 @@ public class BaseTestParallelExecution {
                 );
             }
 
-            /* ================= SKIP ================= */
-
             if (result.getStatus() == ITestResult.SKIP) {
 
                 test.get().skip(result.getThrowable());
-
             }
-
-            /* ================= CLOSE CONTEXT ================= */
 
             if (currentContext != null) {
                 currentContext.close();
             }
 
-            /* ================= VIDEO ATTACHMENT ================= */
+            /* ===== VIDEO HANDLING ===== */
 
             if (Config.getBoolean("video.recording")
-                    && result.getStatus() == ITestResult.FAILURE
                     && currentPage != null
                     && currentPage.video() != null) {
 
+                Path videoPath = currentPage.video().path();
+
                 Path videoDir = Paths.get("test-output/latest-report/videos");
                 Files.createDirectories(videoDir);
-
-                Path videoPath = currentPage.video().path();
 
                 Path finalVideo =
                         videoDir.resolve(result.getName() + ".webm");
 
                 Files.move(videoPath, finalVideo);
 
-                String relativeVideoPath =
-                        "videos/" + finalVideo.getFileName();
+                if (result.getStatus() == ITestResult.SUCCESS) {
 
-                test.get().info(
-                        "<video width='720' height='405' controls>" +
-                                "<source src='" + relativeVideoPath + "' type='video/webm'>" +
-                                "</video>"
-                );
+                    Files.deleteIfExists(finalVideo);
+
+                }
+
+                if (result.getStatus() == ITestResult.FAILURE) {
+
+                    String relativeVideoPath =
+                            "videos/" + finalVideo.getFileName();
+
+                    test.get().info(
+                            "<video width='720' height='405' controls>" +
+                                    "<source src='" + relativeVideoPath + "' type='video/webm'>" +
+                                    "</video>"
+                    );
+                }
             }
 
         }

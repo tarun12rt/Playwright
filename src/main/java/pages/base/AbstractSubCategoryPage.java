@@ -44,7 +44,7 @@ public abstract class AbstractSubCategoryPage extends BasePage {
         subMenu = page.locator("//ul[contains(@class,'sub')]//a[text()='" + subMenuText + "']");
 
         /* ===== Heading ===== */
-        heading = page.locator("//h1[normalize-space()='" + headingText + "']");
+        heading = page.locator("//h1[normalize-space()=\"" + headingText + "\"]");
 
         /* ===== Hero ===== */
         heroSection = page.locator("//section[@data-title='Dynamic Listing 1']");
@@ -68,15 +68,9 @@ public abstract class AbstractSubCategoryPage extends BasePage {
 
     public void open() {
         openBaseUrl();
-
         mainMenu.hover();
-
-        subMenu.waitFor(
-                new Locator.WaitForOptions()
-                        .setState(WaitForSelectorState.VISIBLE)
-        );
-
         safeClick(subMenu);
+
     }
 
     public void clickHeroReadNow() {

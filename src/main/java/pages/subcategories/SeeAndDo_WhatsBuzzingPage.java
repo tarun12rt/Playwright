@@ -9,9 +9,9 @@ public class SeeAndDo_WhatsBuzzingPage extends AbstractSubCategoryPage {
         super(
                 page,
                 "/seeanddo",          // Main menu href
-                "What's Buzzing",     // Sub menu text
-                "WHAT'S BUZZING",     // Page heading
-                "SEE & DO"            // Breadcrumb text
+                "What’s Buzzing",     // Sub menu text
+                "What's Buzzing",     // Page heading
+                "See & Do"            // Breadcrumb text
         );
     }
 }
