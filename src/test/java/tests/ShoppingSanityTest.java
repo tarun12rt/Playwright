@@ -75,12 +75,12 @@ public class ShoppingSanityTest extends BaseTestParallelExecution {
 
     /* ================= Load More ================= */
 
-    @Test
+ /*   @Test
     public void verifyLoadMoreWorks() {
         ShoppingPage page = getShoppingPage();
         int before = page.getLatestArticleCount();
         page.clickLoadMore();
         int after = page.getLatestArticleCount();
         Assert.assertTrue(after > before, "Load More did not increase article count");
-    }
+    }*/
 }

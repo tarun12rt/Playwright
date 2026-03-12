@@ -40,8 +40,8 @@ public abstract class AbstractCategoryPage extends BasePage {
         menu = page.locator("//nav[@id='main-nav']//a[@href='" + menuHref + "']");
 
         /* ===== Hero ===== */
-        heroSection = page.locator("//section[@data-title='Dynamic Listing 1']");
-        heroTitle = heroSection.locator("h2 a");
+        heroSection = page.locator("(//section[contains(@data-title,'Dynamic Listing')])[1]");
+        heroTitle = heroSection.locator("//h2/a");
         heroReadNowButton = heroSection.locator("a:has-text('Read')");
 
         /* ===== Latest ===== */
@@ -93,7 +93,8 @@ public abstract class AbstractCategoryPage extends BasePage {
     }
 
     public boolean isHeroTitleVisible() {
-        return waitUntilVisible(heroTitle);
+        boolean nln = waitUntilVisible(heroTitle);
+        return nln;
     }
 
     public boolean isHeroReadNowButtonVisible() {
