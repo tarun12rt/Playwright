@@ -46,31 +46,31 @@ public class ShoppingPage extends BasePage {
         heading = page.locator("//h1[normalize-space()='Shopping']");
 
         /* ===== Hero ===== */
-        heroSection = page.locator("//h1[normalize-space()='Shopping']/following::div[contains(@class,'article')][1]");
-        heroTitle = heroSection.locator("h2 a");
+        heroSection = page.locator("//img[@fetchpriority=\"high\"]/ancestor::section[1]");
+        heroTitle = heroSection.locator("//h1/a");
 
         /* ===== 8days Tested ===== */
-        testedSection = page.locator("//h2[normalize-space()='8days Tested']");
-        testedArticles = testedSection.locator("xpath=following::div[contains(@class,'article')]");
+        testedSection = page.locator("//h2[normalize-space()='8days Tested']/parent::section");
+        testedArticles = testedSection.locator("//img");
 
         /* ===== Latest ===== */
-        latestSection = page.locator("//h2[normalize-space()='Latest']");
-        latestArticles = latestSection.locator("xpath=following::div[contains(@class,'article')]");
+        latestSection = page.locator("//h2[normalize-space()='Latest']/parent::section");
+        latestArticles = latestSection.locator("//img");
 
         /* ===== Deals ===== */
-        dealsSection = page.locator("//h2[normalize-space()='Deals']");
-        dealsArticles = dealsSection.locator("xpath=following::div[contains(@class,'article')]");
+        dealsSection = page.locator("//a[normalize-space()='Deals']/ancestor::section[@class=\"section-four-items\"]");
+        dealsArticles = dealsSection.locator("//img");
 
         /* ===== Check These Out ===== */
-        checkTheseOutSection = page.locator("//h2[normalize-space()='Check These Out']");
-        checkTheseOutArticles = checkTheseOutSection.locator("xpath=following::div[contains(@class,'article')]");
+        checkTheseOutSection = page.locator("//h2[normalize-space()='Check These Out']/parent::section");
+        checkTheseOutArticles = checkTheseOutSection.locator("//img");
 
         /* ===== Load More ===== */
         loadMoreButton = page.locator("//button[normalize-space()='LOAD MORE']");
 
         /* ===== Breadcrumb ===== */
         articleBreadcrumb = page.locator(
-                "//a[contains(@class,'breadcrumb__link') and normalize-space()='Shopping']");
+                "//ol[@class=\"breadcrumb\"]");
 
         /* ===== Menu ===== */
         menu = page.locator("//nav[@id='main-nav']//a[@href='/shopping']");
@@ -113,7 +113,7 @@ public class ShoppingPage extends BasePage {
     }
 
     public boolean hasTestedArticles() {
-        return testedArticles.count() > 0;
+        return testedArticles.count() == 2 ;
     }
 
     /* ===== Latest ===== */

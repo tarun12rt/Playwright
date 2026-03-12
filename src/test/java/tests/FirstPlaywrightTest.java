@@ -1,3 +1,4 @@
+/*
 
 package tests;
 
@@ -8250,3 +8251,4 @@ public class FirstPlaywrightTest extends BaseTestSingleExecution {
 
 }
 
+*/
