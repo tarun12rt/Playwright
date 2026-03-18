@@ -189,4 +189,310 @@ public class BasePage {
             System.out.println("Ad popup not present.");
         }
     }
+
+    /* ================= ATTRIBUTE UTILITIES ================= */
+
+    protected String getAttribute(Locator locator, String attributeName) {
+        return locator.getAttribute(attributeName);
+    }
+
+    protected boolean hasAttribute(Locator locator, String attributeName) {
+        return locator.getAttribute(attributeName) != null;
+    }
+
+    protected String getPlaceholder(Locator locator) {
+        return locator.getAttribute("placeholder");
+    }
+
+    protected String getInputValue(Locator locator) {
+        return locator.inputValue();
+    }
+
+    /* ================= ELEMENT STATE CHECKS ================= */
+
+    protected boolean isElementEnabled(Locator locator) {
+        try {
+            return locator.isEnabled();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    protected boolean isElementDisabled(Locator locator) {
+        return !isElementEnabled(locator);
+    }
+
+    protected boolean isElementChecked(Locator locator) {
+        try {
+            return locator.isChecked();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    protected boolean doesElementExist(Locator locator) {
+        try {
+            return locator.count() > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    protected int getElementCount(Locator locator) {
+        return locator.count();
+    }
+
+    /* ================= KEYBOARD INTERACTIONS ================= */
+
+    protected void pressKey(String key) {
+        page.keyboard().press(key);
+    }
+
+    protected void typeText(String text) {
+        page.keyboard().type(text);
+    }
+
+    protected void typeTextWithDelay(Locator locator, String text, int delayMs) {
+        locator.fill(text, new Locator.FillOptions().setNoWaitAfter(false));
+    }
+
+    protected void pressTab() {
+        page.keyboard().press("Tab");
+    }
+
+    protected void pressEnter() {
+        page.keyboard().press("Enter");
+    }
+
+    protected void pressEscape() {
+        page.keyboard().press("Escape");
+    }
+
+    protected void selectAll() {
+        page.keyboard().press("Control+A");
+    }
+
+    /* ================= MOUSE INTERACTIONS ================= */
+
+    protected void hoverOver(Locator locator) {
+        locator.hover();
+    }
+
+    protected void doubleClick(Locator locator) {
+        locator.dblclick();
+    }
+
+    protected void rightClick(Locator locator) {
+        locator.click(new Locator.ClickOptions().setButton(com.microsoft.playwright.options.MouseButton.RIGHT));
+    }
+
+    protected void clickAtCoordinates(int x, int y) {
+        page.mouse().click(x, y);
+    }
+
+    protected void dragAndDrop(Locator sourceLocator, Locator targetLocator) {
+        sourceLocator.dragTo(targetLocator);
+    }
+
+    /* ================= MULTIPLE ELEMENT OPERATIONS ================= */
+
+    protected int countElements(String selector) {
+        return page.locator(selector).count();
+    }
+
+    protected String getFirstElementText(String selector) {
+        return page.locator(selector).first().textContent().trim();
+    }
+
+    protected String getLastElementText(String selector) {
+        return page.locator(selector).last().textContent().trim();
+    }
+
+    protected String getNthElementText(String selector, int index) {
+        return page.locator(selector).nth(index).textContent().trim();
+    }
+
+    protected java.util.List<String> getAllElementsText(String selector) {
+        java.util.List<String> textList = new java.util.ArrayList<>();
+        Locator locator = page.locator(selector);
+        for (int i = 0; i < locator.count(); i++) {
+            String text = locator.nth(i).textContent().trim();
+            if (!text.isEmpty()) {
+                textList.add(text);
+            }
+        }
+        return textList;
+    }
+
+    /* ================= DROPDOWN/SELECT UTILITIES ================= */
+
+    protected void selectByText(Locator selectLocator, String text) {
+        selectLocator.selectOption(text);
+    }
+
+    protected void selectByValue(Locator selectLocator, String value) {
+        selectLocator.selectOption(value);
+    }
+
+    protected String getSelectedOptionText(Locator selectLocator) {
+        return selectLocator.locator("option[selected]").textContent().trim();
+    }
+
+    /* ================= PAGE STATE MANAGEMENT ================= */
+
+    protected void reloadPage() {
+        page.reload();
+    }
+
+    protected void goBack() {
+        page.goBack();
+    }
+
+    protected void goForward() {
+        page.goForward();
+    }
+
+    protected void waitForPageReady() {
+        page.waitForLoadState(LoadState.NETWORKIDLE);
+    }
+
+    protected void waitForDOMReady() {
+        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
+    }
+
+    protected void clearAllCookies() {
+        page.context().clearCookies();
+    }
+
+    protected void clearBrowserCache() {
+        page.evaluate("() => { sessionStorage.clear(); localStorage.clear(); }");
+    }
+
+    /* ================= JAVASCRIPT EXECUTION ================= */
+
+    protected Object executeJavaScript(String script) {
+        return page.evaluate(script);
+    }
+
+    protected Object executeJavaScriptWithArg(String script, Object arg) {
+        return page.evaluate(script, arg);
+    }
+
+    protected boolean isElementInViewport(Locator locator) {
+        return (boolean) page.evaluate(
+                "element => element.getBoundingClientRect().top >= 0 && element.getBoundingClientRect().bottom <= window.innerHeight",
+                locator.elementHandle()
+        );
+    }
+
+    /* ================= ALERT HANDLING ================= */
+
+    protected void acceptAlert() {
+        page.onceDialog(dialog -> dialog.accept());
+    }
+
+    protected void dismissAlert() {
+        page.onceDialog(dialog -> dialog.dismiss());
+    }
+
+    protected String getAlertText() {
+        String[] alertText = new String[1];
+        page.onceDialog(dialog -> {
+            alertText[0] = dialog.message();
+            dialog.accept();
+        });
+        return alertText[0];
+    }
+
+    protected void acceptAlertWithMessage(String message) {
+        page.onceDialog(dialog -> {
+            if (dialog.message().contains(message)) {
+                dialog.accept();
+            }
+        });
+    }
+
+    /* ================= WAIT CONDITIONS ================= */
+
+    protected void waitForElement(String selector) {
+        page.waitForSelector(selector);
+    }
+
+    protected void waitForElementAndClick(String selector) {
+        page.waitForSelector(selector);
+        page.click(selector);
+    }
+
+    protected void waitForFunction(String function, int timeout) {
+        page.waitForFunction(function, new Page.WaitForFunctionOptions().setTimeout(timeout));
+    }
+
+    /* ================= SCREENSHOT & DEBUG ================= */
+
+    protected byte[] takeScreenshot() {
+        return page.screenshot();
+    }
+
+    protected void takeScreenshotToFile(String filePath) {
+        page.screenshot(new Page.ScreenshotOptions().setPath(new java.io.File(filePath).toPath()));
+    }
+
+    protected void highlightElement(Locator locator) {
+        page.evaluate(
+                "element => element.style.border = '3px solid red'",
+                locator.elementHandle()
+        );
+    }
+
+    /* ================= CHECKBOX & RADIO UTILITIES ================= */
+
+    protected void checkCheckbox(Locator locator) {
+        if (!locator.isChecked()) {
+            locator.check();
+        }
+    }
+
+    protected void uncheckCheckbox(Locator locator) {
+        if (locator.isChecked()) {
+            locator.uncheck();
+        }
+    }
+
+    protected void selectRadioButton(Locator locator) {
+        locator.check();
+    }
+
+    /* ================= LOCATOR BUILDERS ================= */
+
+    protected Locator byXPath(String xpath) {
+        return page.locator("xpath=" + xpath);
+    }
+
+    protected Locator byPlaceholder(String placeholder) {
+        return page.getByPlaceholder(placeholder);
+    }
+
+    protected Locator byRole(String role) {
+        return page.getByRole(com.microsoft.playwright.options.AriaRole.valueOf(role.toUpperCase()));
+    }
+
+    protected Locator byTestId(String testId) {
+        return page.getByTestId(testId);
+    }
+
+    /* ================= FILE OPERATIONS ================= */
+
+    protected void uploadFile(Locator locator, String filePath) {
+        locator.setInputFiles(new java.io.File(filePath).toPath());
+    }
+
+    protected void uploadMultipleFiles(Locator locator, String[] filePaths) {
+        java.nio.file.Path[] paths = new java.nio.file.Path[filePaths.length];
+        for (int i = 0; i < filePaths.length; i++) {
+            paths[i] = new java.io.File(filePaths[i]).toPath();
+        }
+        locator.setInputFiles(paths);
+    }
 }
+
+
