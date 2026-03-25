@@ -116,6 +116,7 @@ public abstract class AbstractSubCategoryPage extends BasePage {
     }
 
     public boolean hasAtLeastOneArticle() {
+        waitUntilVisible(articleList);
         return articles.count() > 0;
     }
 
