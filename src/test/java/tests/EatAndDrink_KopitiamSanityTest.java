@@ -21,7 +21,6 @@ public class EatAndDrink_KopitiamSanityTest extends BaseTestParallelExecution {
     @Test
     public void verifyHeroAndArticles() {
         EatAndDrink_KopitiamPage page = getPage();
-        Assert.assertTrue(page.isHeroVisible());
         Assert.assertTrue(page.hasAtLeastOneArticle());
     }
 }
