@@ -129,6 +129,7 @@ public class BaseTestParallelExecution {
         Page pg = ctx.newPage();
         page.set(pg);
 
+
         test.set(extent.createTest(method.getName()));
     }
 
