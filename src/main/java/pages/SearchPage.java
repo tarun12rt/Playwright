@@ -37,22 +37,22 @@ public class SearchPage extends BasePage {
         super(page);
 
         /* ===== Search Box ===== */
-        searchInput = page.locator("input[placeholder='Search']");
-        searchButton = page.locator("button.search");
+        searchInput = page.locator("//input[@id='algolia-search-input']");
+        searchButton = page.locator("//button[@id='algolia-autocomplete-submit']");
 
         /* ===== Search Heading ===== */
-        searchHeading = page.locator("//div[@id='trending-topics']");
+        searchHeading = page.locator("//h1[normalize-space()='Search Results']");
 
         /* ===== Results ===== */
-        resultItems = page.locator("div.search article");
+        resultItems = page.locator("//div[@id='hits']//picture/img");
         resultTitles = resultItems.locator("h2");
 
         /* ===== No Result ===== */
-        noResultMessage = page.locator(":has-text('No results')");
+        noResultMessage = page.locator("//div[@id='hits']//span[contains(text(),'no articles to display')]");
 
         /* ===== Filters ===== */
-        sortDropdown = page.locator("select.sort");
-        categoryDropdown = page.locator("select.category");
+        sortDropdown = page.locator("//select[@name='sortby']");
+        categoryDropdown = page.locator("//select[contains(@class,'search-category-list')]");
 
         /* ===== First Result ===== */
         firstResult = resultItems.first();
@@ -72,13 +72,14 @@ public class SearchPage extends BasePage {
     }
 
     public void search(String keyword) {
+        clearSearch();
         safeFill(searchInput, keyword);
         safeClick(searchButton);
         waitUntilVisible(searchHeading);
     }
 
     public void clearSearch() {
-        safeFill(searchInput, "");
+        searchInput.clear();
     }
 
     public void selectSortBy(String value) {
@@ -100,6 +101,7 @@ public class SearchPage extends BasePage {
     }
 
     public boolean isResultsDisplayed() {
+        waitUntilVisible(resultItems.first());
         return resultItems.count() > 0;
     }
 
@@ -129,6 +131,7 @@ public class SearchPage extends BasePage {
 
     public boolean isSortedByNewest() {
         // Basic sanity: results should be present after sorting
+        waitUntilVisible(resultItems);
         return resultItems.count() > 0;
     }
 
@@ -143,5 +146,9 @@ public class SearchPage extends BasePage {
 
     public String getCurrentUrl() {
         return page.url();
+    }
+
+    public void clearSearchBarOnSearchPage() {
+        page.locator("//button[contains(@class,'SearchBox-reset')]").click();
     }
 }
