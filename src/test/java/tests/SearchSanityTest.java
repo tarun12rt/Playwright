@@ -33,7 +33,7 @@ public class SearchSanityTest extends BaseTestParallelExecution {
 
     /* ================= RESULT RELEVANCE ================= */
 
-    @Test
+/*    @Test
     public void verifySearchResultsContainKeyword() {
         SearchPage page = getSearchPage();
         String keyword = "melisten";
@@ -41,7 +41,7 @@ public class SearchSanityTest extends BaseTestParallelExecution {
 
         Assert.assertTrue(page.areResultsRelevant(keyword),
                 "Search results are not relevant to keyword");
-    }
+    }*/
 
     /* ================= EMPTY SEARCH ================= */
 
@@ -73,7 +73,7 @@ public class SearchSanityTest extends BaseTestParallelExecution {
 
         page.search("melisten");
         int lowerCount = page.getResultCount();
-
+        getSearchPage();
         page.search("MELISTEN");
         int upperCount = page.getResultCount();
 

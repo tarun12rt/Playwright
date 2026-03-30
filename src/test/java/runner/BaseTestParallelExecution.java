@@ -115,7 +115,12 @@ public class BaseTestParallelExecution {
 
         browser.set(br);
 
+        // ✅ UPDATED PART STARTS HERE
         Browser.NewContextOptions options = new Browser.NewContextOptions();
+
+        // 🔥 IMPORTANT: This enables full screen rendering
+        options.setViewportSize(null);
+        // ✅ UPDATED PART ENDS HERE
 
         if (Config.getBoolean("video.recording")) {
 
@@ -128,7 +133,6 @@ public class BaseTestParallelExecution {
 
         Page pg = ctx.newPage();
         page.set(pg);
-
 
         test.set(extent.createTest(method.getName()));
     }
