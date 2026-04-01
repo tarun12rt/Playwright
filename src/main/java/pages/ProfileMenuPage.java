@@ -2,6 +2,7 @@ package pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import config.Config;
 import pages.base.BasePage;
 
 public class ProfileMenuPage extends BasePage {
@@ -21,7 +22,7 @@ public class ProfileMenuPage extends BasePage {
     public ProfileMenuPage(Page page) {
         super(page);
 
-        profileIcon = page.locator("a.user-avatar");
+        profileIcon = page.locator("(//img[@id='user-avatar'])[2]");
         modal = page.locator("//div[contains(@class,'modal')]");
 
         editPreferences = page.locator("//a[contains(text(),'Edit your preferences')]");
@@ -36,8 +37,22 @@ public class ProfileMenuPage extends BasePage {
 
     public void openProfileMenu() {
         openBaseUrl();
-        safeClick(profileIcon);
-        waitUntilVisible(modal);
+       navigateToLogin();
+        Locator emailInput = page.locator("//input[@type='email']");
+        Locator passwordInput = page.locator("//input[@type='password']");
+        Locator signInButton = page.locator("(//button[normalize-space()='SIGN IN'])[2]");
+        waitUntilVisible(emailInput);
+
+        safeFill(emailInput, Config.get("username"));
+        safeFill(passwordInput, Config.get("password"));
+        safeClick(signInButton);
+        waitUntilVisible(profileIcon);
+
+    }
+
+    private void navigateToLogin() {
+        Locator unloggedProfileIcon = page.locator("(//nav[@id='profile-menu-nav']//li)[1]");
+        safeClick(unloggedProfileIcon);
     }
 
     public void clickEditPreferences() {
@@ -63,7 +78,7 @@ public class ProfileMenuPage extends BasePage {
     /* ================= VERIFICATIONS ================= */
 
     public boolean isProfileMenuVisible() {
-        return modal.isVisible();
+        return profileIcon.isVisible();
     }
 
     public boolean isEditPreferencesVisible() {
