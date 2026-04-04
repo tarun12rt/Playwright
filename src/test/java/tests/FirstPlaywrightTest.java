@@ -1,5 +1,4 @@
 
-
 package tests;
 
 import runner.BaseTestSingleExecution;
@@ -15267,8 +15266,157 @@ public class FirstPlaywrightTest extends BaseTestSingleExecution {
         Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
         test.pass("Live & Learn menu visible");
 
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Shopping']").isVisible());
+        test.pass("Shopping menu visible");
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Shopping']").isVisible());
+        test.pass("Shopping menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Shopping']").isVisible());
+        test.pass("Shopping menu visible");
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Shopping']").isVisible());
+        test.pass("Shopping menu visible");
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Shopping']").isVisible());
+        test.pass("Shopping menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Shopping']").isVisible());
+        test.pass("Shopping menu visible");
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Shopping']").isVisible());
+        test.pass("Shopping menu visible");
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Shopping']").isVisible());
+        test.pass("Shopping menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Shopping']").isVisible());
+        test.pass("Shopping menu visible");
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Shopping']").isVisible());
+        test.pass("Shopping menu visible");
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Shopping']").isVisible());
+        test.pass("Shopping menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Shopping']").isVisible());
+        test.pass("Shopping menu visible");
+        Assert.assertTrue(page.locator("//a[normalize-space()='See & Do']").isVisible());
+        test.pass("See & Do menu visible");
+
+        Assert.assertTrue(page.locator("//a[normalize-space()='Live & Learn']").isVisible());
+        test.pass("Live & Learn menu visible");
+
+
     }
 
 }
 
-*/
