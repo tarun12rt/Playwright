@@ -10,7 +10,6 @@ public class ProfileMenuPage extends BasePage {
     /* ================= LOCATORS ================= */
 
     private final Locator profileIcon;
-    private final Locator modal;
 
     private final Locator editPreferences;
     private final Locator bookmarks;
@@ -23,7 +22,6 @@ public class ProfileMenuPage extends BasePage {
         super(page);
 
         profileIcon = page.locator("(//img[@id='user-avatar'])[2]");
-        modal = page.locator("//div[contains(@class,'modal')]");
 
         editPreferences = page.locator("//a[contains(text(),'Edit your preferences')]");
         bookmarks = page.locator("//a[contains(text(),'Bookmarks')]");
@@ -37,7 +35,7 @@ public class ProfileMenuPage extends BasePage {
 
     public void openProfileMenu() {
         openBaseUrl();
-       navigateToLogin();
+        navigateToLogin();
         Locator emailInput = page.locator("//input[@type='email']");
         Locator passwordInput = page.locator("//input[@type='password']");
         Locator signInButton = page.locator("(//button[normalize-space()='SIGN IN'])[2]");
@@ -47,6 +45,8 @@ public class ProfileMenuPage extends BasePage {
         safeFill(passwordInput, Config.get("password"));
         safeClick(signInButton);
         waitUntilVisible(profileIcon);
+        safeClick(profileIcon);
+        waitUntilVisible(editPreferences);
 
     }
 
